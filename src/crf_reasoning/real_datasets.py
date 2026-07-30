@@ -17,7 +17,7 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 
-from data import CharTokenizer
+from .data import CharTokenizer
 
 
 class HumanEvalDataset(Dataset):
@@ -73,7 +73,7 @@ class HumanEvalDataset(Dataset):
             print(f"[data] HumanEval unavailable ({e}), using synthetic code data")
         
         # Fallback to synthetic code data
-        from data import CodeCompletionDataset
+        from .data import CodeCompletionDataset
         fallback = CodeCompletionDataset(
             n_samples=200,
             seq_len=self.seq_len,
@@ -149,7 +149,7 @@ class GSM8KDataset(Dataset):
             print(f"[data] GSM8K unavailable ({e}), using synthetic arithmetic data")
         
         # Fallback to synthetic arithmetic
-        from data import ArithmeticDataset
+        from .data import ArithmeticDataset
         fallback = ArithmeticDataset(
             n_samples=200,
             seq_len=self.seq_len,
@@ -245,7 +245,7 @@ class ARCAGIDataset(Dataset):
             print(f"[data] ARC-AGI unavailable ({e}), using synthetic ARC data")
         
         # Fallback to synthetic ARC
-        from data import ARCProxyDataset
+        from .data import ARCProxyDataset
         fallback = ARCProxyDataset(
             n_samples=200,
             seq_len=self.seq_len,
@@ -293,7 +293,7 @@ class RealDatasetFactory:
         tokenizer = tokenizer or CharTokenizer()
         
         if name == 'tinystories':
-            from data import TinyStoriesDataset
+            from .data import TinyStoriesDataset
             return TinyStoriesDataset(
                 split=split,
                 seq_len=seq_len,

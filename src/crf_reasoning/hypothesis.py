@@ -27,14 +27,14 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Subset
 
-from data import get_datasets, make_dataloader, CharTokenizer
-from crf_vectorized import CRFLanguageModel, AblationConfig
-from ablations import ModelConfig, make_crf, make_transformer
-from metrics import estimate_crf_flops, estimate_transformer_flops, perplexity
-from train import count_gpt_params
+from .data import get_datasets, make_dataloader, CharTokenizer
+from .crf_vectorized import CRFLanguageModel, AblationConfig
+from .ablations import ModelConfig, make_crf, make_transformer
+from .metrics import estimate_crf_flops, estimate_transformer_flops, perplexity
+from scripts.train import count_gpt_params
 
 
-RESULTS_DIR = Path(__file__).parent / 'results'
+RESULTS_DIR = Path(__file__).resolve().parents[2] / 'results'
 DEVICE = torch.device('cpu')
 
 

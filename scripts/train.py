@@ -18,15 +18,21 @@ import os
 import math
 import time
 import copy
+import sys
 from typing import Optional, Dict, List, Tuple
 from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 
-from metrics import (
+from crf_reasoning.metrics import (
     perplexity, aggregate_metrics, estimate_crf_flops,
     estimate_transformer_flops, measure_memory_mb,
 )
@@ -388,7 +394,7 @@ def make_matched_transformer(
     exact param count is closest to target_params. Uses same vocab,
     tie_weights=True, and SwiGLU activation.
     """
-    from transformer import GPT
+    from crf_reasoning.transformer import GPT
 
     best_model  = None
     best_delta  = float('inf')
@@ -428,10 +434,8 @@ def make_matched_transformer(
 # ─── Quick smoke test ────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, '.')
-    from data import get_datasets, make_dataloader
-    from crf_vectorized import CRFLanguageModel, AblationConfig
+    from crf_reasoning.data import get_datasets, make_dataloader
+    from crf_reasoning.crf_vectorized import CRFLanguageModel, AblationConfig
 
     tok_size = 99
     cfg      = AblationConfig()

@@ -21,16 +21,22 @@ import math
 import random
 import argparse
 from typing import Dict, List, Any
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 import torch
 import torch.nn as nn
 
 # local imports
-from data import get_datasets, make_dataloader, CharTokenizer
-from crf_vectorized import CRFLanguageModel, AblationConfig
-from ablations import ABLATION_CONFIGS, ABLATION_DESCRIPTIONS, ModelConfig, make_crf, make_transformer
-from train import train, cosine_lr
-from metrics import (
+from crf_reasoning.data import get_datasets, make_dataloader, CharTokenizer
+from crf_reasoning.crf_vectorized import CRFLanguageModel, AblationConfig
+from crf_reasoning.ablations import ABLATION_CONFIGS, ABLATION_DESCRIPTIONS, ModelConfig, make_crf, make_transformer
+from scripts.train import train, cosine_lr
+from crf_reasoning.metrics import (
     perplexity, aggregate_metrics, estimate_crf_flops,
     estimate_transformer_flops, measure_inference_latency,
     measure_memory_mb, validate_bounded_communication,
@@ -38,7 +44,7 @@ from metrics import (
     fit_scaling_law, compute_graph_diameter_from_states,
 )
 
-RESULTS_DIR = os.path.join(os.path.dirname(__file__), 'results')
+RESULTS_DIR = str(ROOT_DIR / 'results')
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 DEVICE = torch.device('cpu')

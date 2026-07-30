@@ -4,7 +4,7 @@ Unit tests for data loading and tokenization
 
 import pytest
 import torch
-from data import (
+from crf_reasoning.data import (
     CharTokenizer, SyntheticDataset, ArithmeticDataset,
     ChainOfThoughtDataset, CodeCompletionDataset, ARCProxyDataset,
     get_datasets, make_dataloader
@@ -261,7 +261,7 @@ class TestIntegration:
     
     def test_full_pipeline(self):
         """Test complete data pipeline from dataset to model."""
-        from crf_vectorized import CRFLanguageModel
+        from crf_reasoning.crf_vectorized import CRFLanguageModel
         
         # Create dataset
         train_ds, val_ds = get_datasets('synthetic', seq_len=32, max_train=50, max_val=10)

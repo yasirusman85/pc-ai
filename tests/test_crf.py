@@ -5,7 +5,7 @@ Unit tests for CRF components
 import pytest
 import torch
 import numpy as np
-from crf_vectorized import (
+from crf_reasoning.crf_vectorized import (
     AblationConfig, CRFMetrics, SharedCellProgram,
     VectorizedFabric, CellPopulation, VectorizedCRF, CRFLanguageModel
 )
@@ -330,7 +330,7 @@ class TestIntegration:
     
     def test_ablation_configurations(self):
         """Test all ablation configurations are valid."""
-        from ablations import ABLATION_CONFIGS
+        from crf_reasoning.ablations import ABLATION_CONFIGS
         
         for name, config in ABLATION_CONFIGS.items():
             model = CRFLanguageModel(

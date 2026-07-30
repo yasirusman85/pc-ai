@@ -51,9 +51,9 @@ pip install -e .
 ### Basic Usage
 
 ```python
-from crf_vectorized import CRFLanguageModel, AblationConfig
-from data import get_datasets, make_dataloader
-from train import train
+from crf_reasoning.crf_vectorized import CRFLanguageModel, AblationConfig
+from crf_reasoning.data import get_datasets, make_dataloader
+from scripts.train import train
 
 # Load synthetic dataset
 train_ds, val_ds = get_datasets('synthetic', seq_len=64, max_train=1000, max_val=200)
@@ -85,37 +85,32 @@ history = train(
 
 ```bash
 # Fast mode (tiny models for testing)
-python benchmark.py --fast --exp main
+python -m scripts.benchmark --fast --exp main
 
 # Full benchmark suite
-python benchmark.py --exp all
+python -m scripts.benchmark --exp all
 
 # Specific experiments
-python benchmark.py --exp ablations
-python benchmark.py --exp scaling
-python benchmark.py --exp theory
+python -m scripts.benchmark --exp ablations
+python -m scripts.benchmark --exp scaling
+python -m scripts.benchmark --exp theory
 ```
 
 ### Generating Results
 
 ```bash
 # Generate tables and figures from results
-python plot.py
+python -m scripts.plot
 ```
 
 ## Project Structure
 
 ```
 pc-ai/
-├── crf_vectorized.py      # Vectorized CRF implementation
-├── transformer.py         # Transformer baseline
-├── train.py               # Training pipeline
-├── benchmark.py           # Experimental evaluation
-├── data.py                # Dataset loaders
-├── metrics.py             # Evaluation metrics
-├── ablations.py           # Ablation configurations
-├── plot.py                # Result visualization
-├── config.yaml            # Configuration files
+├── src/
+│   └── crf_reasoning/     # Core package (models, data, metrics, configs)
+├── scripts/               # Train/benchmark/plot entry points
+├── config/                # Configuration files
 ├── tests/                 # Unit tests
 ├── docs/                  # Technical documentation
 ├── results/               # Experiment outputs
@@ -190,7 +185,7 @@ writer = SummaryWriter('runs/experiment_1')
 ```bash
 wandb login
 wandb init crf-research
-python benchmark.py  # Automatically logs to W&B
+python -m scripts.benchmark  # Automatically logs to W&B
 ```
 
 ## Testing
@@ -200,7 +195,7 @@ python benchmark.py  # Automatically logs to W&B
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=crf --cov-report=html
+pytest tests/ --cov=crf_reasoning --cov-report=html
 
 # Run specific test
 pytest tests/test_crf.py::test_cell_population
@@ -211,7 +206,7 @@ pytest tests/test_crf.py::test_cell_population
 ### Mixed Precision Training
 
 ```python
-from train import train
+from scripts.train import train
 
 history = train(
     model, train_loader, val_loader,
@@ -223,7 +218,7 @@ history = train(
 ### Distributed Training
 
 ```bash
-torchrun --nproc_per_node=4 benchmark.py --exp main
+torchrun --nproc_per_node=4 -m scripts.benchmark --exp main
 ```
 
 ## Citation

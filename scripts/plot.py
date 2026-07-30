@@ -11,8 +11,10 @@ import sys
 import json
 import math
 from typing import Dict, Any, List
+from pathlib import Path
 
-RESULTS_DIR = os.path.join(os.path.dirname(__file__), 'results')
+ROOT_DIR = Path(__file__).resolve().parent.parent
+RESULTS_DIR = str(ROOT_DIR / 'results')
 
 
 # ─── Load ────────────────────────────────────────────────────────────────────

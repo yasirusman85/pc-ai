@@ -13,8 +13,11 @@ import torch
 import yaml
 from omegaconf import OmegaConf, DictConfig
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "default.yaml"
 
-def load_config(config_path: str = "config/default.yaml", 
+
+def load_config(config_path: str = str(DEFAULT_CONFIG_PATH), 
                 overrides: Optional[Dict[str, Any]] = None) -> DictConfig:
     """
     Load configuration from YAML file with optional overrides.
@@ -149,7 +152,7 @@ class ConfigManager:
     Manages experiment configuration with validation and defaults.
     """
     
-    def __init__(self, config_path: str = "config/default.yaml"):
+    def __init__(self, config_path: str = str(DEFAULT_CONFIG_PATH)):
         self.config_path = config_path
         self.config = load_config(config_path)
         self._validate_config()
@@ -225,13 +228,13 @@ class ConfigManager:
 
 if __name__ == "__main__":
     # Test configuration loading
-    config = load_config("config/default.yaml")
+    config = load_config(str(DEFAULT_CONFIG_PATH))
     print("Default config loaded successfully")
     print(f"Model type: {config.model.type}")
     print(f"Dataset: {config.data.dataset}")
     
     # Test ConfigManager
-    manager = ConfigManager("config/default.yaml")
+    manager = ConfigManager(str(DEFAULT_CONFIG_PATH))
     setup = manager.setup_experiment()
     print(f"\nExperiment setup:")
     print(f"Device: {setup['device']}")

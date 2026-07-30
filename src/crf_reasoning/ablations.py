@@ -17,7 +17,7 @@ Ablation registry:
 from dataclasses import dataclass, asdict
 from typing import Dict, Optional
 
-from crf_vectorized import AblationConfig, CRFLanguageModel
+from .crf_vectorized import AblationConfig, CRFLanguageModel
 
 
 # ─── Named ablation registry ─────────────────────────────────────────────────
@@ -121,7 +121,7 @@ def make_transformer(
     If target_params is None, uses a fixed small GPT that roughly matches
     a small CRF.
     """
-    from transformer import GPT
+    from .transformer import GPT
 
     if target_params is None:
         # Use a comparable fixed config
@@ -142,7 +142,7 @@ def make_transformer(
             tie_weights = True,
         )
     else:
-        from train import make_matched_transformer
+        from scripts.train import make_matched_transformer
         return make_matched_transformer(
             vocab_size    = model_cfg.vocab_size,
             target_params = target_params,

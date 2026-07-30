@@ -33,7 +33,8 @@ setup(
         "Source": "https://github.com/yourusername/pc-ai",
         "Documentation": "https://github.com/yourusername/pc-ai/blob/main/README.md",
     },
-    packages=find_packages(exclude=["tests", "tests.*", "results", "results.*"]),
+    package_dir={"": "src", "scripts": "scripts"},
+    packages=find_packages(where="src", exclude=["tests", "tests.*", "results", "results.*"]) + ["scripts"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
@@ -62,8 +63,8 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "crf-benchmark=benchmark:main",
-            "crf-plot=plot:main",
+            "crf-benchmark=scripts.benchmark:main",
+            "crf-plot=scripts.plot:main",
         ],
     },
     include_package_data=True,
