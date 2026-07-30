@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+.DS_Store
+*.pt
+*.pth
+*.bin
+results/hypothesis_sweep_results.json
+results/hypothesis_sweep_summary.json
+venv/
+.venv/

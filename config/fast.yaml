@@ -1,0 +1,28 @@
+# Fast configuration for quick testing
+# Uses smaller models and datasets for rapid iteration
+
+model:
+  type: "crf"
+  d_model: 64
+  d_hidden: 32
+  n_init_cells: 16
+  max_cells: 64
+  n_crf_steps: 4
+  k_neighbors: 3
+  max_seq_len: 32
+
+training:
+  n_epochs: 3
+  batch_size: 16
+  lr: 3e-4
+  warmup_steps: 20
+
+data:
+  dataset: "synthetic"
+  seq_len: 32
+  max_train: 400
+  max_val: 100
+
+experiment:
+  name: "fast_test"
+  seed: 42

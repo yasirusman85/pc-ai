@@ -1,0 +1,841 @@
+{
+  "config": {
+    "seq_len": 32,
+    "n_train": 400,
+    "n_val": 100,
+    "batch_size": 16,
+    "n_epochs": 3,
+    "lr": 0.0003,
+    "warmup_steps": 20,
+    "d_model": 64,
+    "d_hidden": 32,
+    "n_init_cells": 16,
+    "max_cells": 64,
+    "n_crf_steps": 4,
+    "k_neighbors": 3,
+    "scale_cells": [
+      8,
+      16,
+      32
+    ],
+    "scale_steps": [
+      2,
+      4,
+      6
+    ],
+    "n_seeds": 1
+  },
+  "timestamp": "2026-07-30 21:39:32",
+  "main_comparison": {
+    "synthetic": {
+      "crf": {
+        "run_name": "crf_synthetic",
+        "model_type": "crf",
+        "train_loss": [
+          3.232933506673696,
+          2.1517212966672417,
+          1.9333411779533438
+        ],
+        "train_ppl": [
+          25.35392389139089,
+          8.599648210502208,
+          6.912567819595249
+        ],
+        "val_loss": [
+          2.4120450470898605,
+          1.9866239219098478,
+          1.8999774874867619
+        ],
+        "val_ppl": [
+          11.156753918107036,
+          7.290877593052321,
+          6.685743927686366
+        ],
+        "epoch_time": [
+          5.680050611495972,
+          5.069302558898926,
+          4.884012460708618
+        ],
+        "lr_trace": [
+          0.0002445953109070116,
+          0.00010429544065188978,
+          3.000375869694743e-05
+        ],
+        "crf_metrics": [
+          {
+            "n_cells_mean": 534.8108108108108,
+            "n_cells_std": 55.32235336303711,
+            "n_cells_min": 204,
+            "n_cells_max": 544,
+            "specialization": 0.5557002924584054,
+            "comm_cost_mean": 6417.72972972973,
+            "wall_time_mean": 0.014623899717588682,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 37
+          },
+          {
+            "n_cells_mean": 534.8108108108108,
+            "n_cells_std": 55.32235336303711,
+            "n_cells_min": 204,
+            "n_cells_max": 544,
+            "specialization": 0.6965467720418363,
+            "comm_cost_mean": 6417.72972972973,
+            "wall_time_mean": 0.011178770580807247,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 37
+          },
+          {
+            "n_cells_mean": 534.8108108108108,
+            "n_cells_std": 55.32235336303711,
+            "n_cells_min": 204,
+            "n_cells_max": 544,
+            "specialization": 0.7285355474497821,
+            "comm_cost_mean": 6417.72972972973,
+            "wall_time_mean": 0.016006772582595412,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 37
+          }
+        ],
+        "n_params": 33890,
+        "estimated_flops_per_fwd": 858176,
+        "total_train_time_s": 15.637507915496826,
+        "best_val_loss": 1.8999774874867619,
+        "best_val_ppl": 6.685743927686366,
+        "profile": {
+          "latency_ms_mean": 16.808687210083008,
+          "latency_ms_std": 5.0124993324279785,
+          "latency_ms_min": 10.450281143188477,
+          "latency_ms_max": 22.339500427246094,
+          "memory_mb": 671.015625,
+          "crf_inference_metrics": {
+            "n_cells_mean": 544.0,
+            "n_cells_std": 0.0,
+            "n_cells_min": 544,
+            "n_cells_max": 544,
+            "specialization": 0.7253739714622498,
+            "comm_cost_mean": 6528.0,
+            "wall_time_mean": 0.013468217849731446,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 5
+          }
+        }
+      },
+      "transformer": {
+        "run_name": "transformer_synthetic",
+        "model_type": "transformer",
+        "train_loss": [
+          3.9380689007895335,
+          3.1954952616269896,
+          3.069621819217189
+        ],
+        "train_ppl": [
+          51.31940269215649,
+          24.422266108840834,
+          21.53375748166042
+        ],
+        "val_loss": [
+          3.373498923069722,
+          3.092265966776255,
+          3.0510799820358687
+        ],
+        "val_ppl": [
+          29.180448791124096,
+          22.026933768748435,
+          21.138160933691527
+        ],
+        "epoch_time": [
+          3.184476375579834,
+          3.602505683898926,
+          2.4879133701324463
+        ],
+        "lr_trace": [
+          0.0002445953109070116,
+          0.00010429544065188978,
+          3.000375869694743e-05
+        ],
+        "crf_metrics": [],
+        "n_params": 36256,
+        "estimated_flops_per_fwd": 919552,
+        "total_train_time_s": 9.27836012840271,
+        "best_val_loss": 3.0510799820358687,
+        "best_val_ppl": 21.138160933691527,
+        "profile": {
+          "latency_ms_mean": 2.0043654441833496,
+          "latency_ms_std": 0.24403239786624908,
+          "latency_ms_min": 1.807955026626587,
+          "latency_ms_max": 2.35691499710083,
+          "memory_mb": 672.89453125
+        }
+      },
+      "param_match_ratio": 0.9347418358340689
+    },
+    "arithmetic": {
+      "crf": {
+        "run_name": "crf_arithmetic",
+        "model_type": "crf",
+        "train_loss": [
+          4.276609573364258,
+          3.511270637512207,
+          3.158695650100708
+        ],
+        "train_ppl": [
+          71.99592882817521,
+          33.490795420592946,
+          23.539871666592134
+        ],
+        "val_loss": [
+          3.8268749373299733,
+          3.2662051745823453,
+          3.107605457305908
+        ],
+        "val_ppl": [
+          45.918814605133335,
+          26.211681615387995,
+          22.367420480688185
+        ],
+        "epoch_time": [
+          0.47954297065734863,
+          0.45955944061279297,
+          0.6338717937469482
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.47354499782834736,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.006088359015328544,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.6897783534867423,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.00946875980922154,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.6946567211832319,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.008857624871390206,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          }
+        ],
+        "n_params": 33890,
+        "estimated_flops_per_fwd": 858176,
+        "total_train_time_s": 1.57568359375,
+        "best_val_loss": 3.107605457305908,
+        "best_val_ppl": 22.367420480688185,
+        "profile": {
+          "latency_ms_mean": 11.920345306396484,
+          "latency_ms_std": 4.590573787689209,
+          "latency_ms_min": 7.458317756652832,
+          "latency_ms_max": 17.288747787475586,
+          "memory_mb": 672.92578125,
+          "crf_inference_metrics": {
+            "n_cells_mean": 544.0,
+            "n_cells_std": 0.0,
+            "n_cells_min": 544,
+            "n_cells_max": 544,
+            "specialization": 0.694851565361023,
+            "comm_cost_mean": 6528.0,
+            "wall_time_mean": 0.015407085418701172,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 5
+          }
+        }
+      },
+      "transformer": {
+        "run_name": "transformer_arithmetic",
+        "model_type": "transformer",
+        "train_loss": [
+          4.532631759643555,
+          4.308224391937256,
+          4.164692802429199
+        ],
+        "train_ppl": [
+          93.00300083201067,
+          74.30842908595582,
+          64.37290420590722
+        ],
+        "val_loss": [
+          4.422670773097447,
+          4.205730642591204,
+          4.139169897351946
+        ],
+        "val_ppl": [
+          83.31851330989731,
+          67.06958366289619,
+          62.750710292608346
+        ],
+        "epoch_time": [
+          0.3928401470184326,
+          0.35565900802612305,
+          0.25702476501464844
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [],
+        "n_params": 36256,
+        "estimated_flops_per_fwd": 919552,
+        "total_train_time_s": 1.008190631866455,
+        "best_val_loss": 4.139169897351946,
+        "best_val_ppl": 62.750710292608346,
+        "profile": {
+          "latency_ms_mean": 2.836116313934326,
+          "latency_ms_std": 0.9236725568771362,
+          "latency_ms_min": 1.9552409648895264,
+          "latency_ms_max": 3.9175379276275635,
+          "memory_mb": 672.9296875
+        }
+      },
+      "param_match_ratio": 0.9347418358340689
+    },
+    "arc": {
+      "crf": {
+        "run_name": "crf_arc",
+        "model_type": "crf",
+        "train_loss": [
+          4.15995491027832,
+          3.2746493339538576,
+          2.9107307243347167
+        ],
+        "train_ppl": [
+          64.06863369794539,
+          26.433954364864018,
+          18.370217228512498
+        ],
+        "val_loss": [
+          3.6016299724578857,
+          3.0127088682992116,
+          2.8543479442596436
+        ],
+        "val_ppl": [
+          36.657937201535674,
+          20.34243032116842,
+          17.363111798939702
+        ],
+        "epoch_time": [
+          0.6930346488952637,
+          0.6828980445861816,
+          0.7262477874755859
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.3219192326068878,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.015003170285906111,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.466795346566609,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.006356920514787946,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.46822374207632883,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.011280025754656111,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          }
+        ],
+        "n_params": 33890,
+        "estimated_flops_per_fwd": 858176,
+        "total_train_time_s": 2.104423999786377,
+        "best_val_loss": 2.8543479442596436,
+        "best_val_ppl": 17.363111798939702,
+        "profile": {
+          "latency_ms_mean": 7.949380397796631,
+          "latency_ms_std": 3.2795820236206055,
+          "latency_ms_min": 5.2992448806762695,
+          "latency_ms_max": 13.500747680664062,
+          "memory_mb": 673.65625,
+          "crf_inference_metrics": {
+            "n_cells_mean": 544.0,
+            "n_cells_std": 0.0,
+            "n_cells_min": 544,
+            "n_cells_max": 544,
+            "specialization": 0.4682863652706146,
+            "comm_cost_mean": 6528.0,
+            "wall_time_mean": 0.007039690017700195,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 5
+          }
+        }
+      },
+      "transformer": {
+        "run_name": "transformer_arc",
+        "model_type": "transformer",
+        "train_loss": [
+          4.498642120361328,
+          4.20436222076416,
+          4.007953615188598
+        ],
+        "train_ppl": [
+          89.89498182171091,
+          66.97786694857027,
+          55.03413423544316
+        ],
+        "val_loss": [
+          4.35731383732387,
+          4.0633856909615655,
+          3.97099655015128
+        ],
+        "val_ppl": [
+          78.04720510782994,
+          58.17092683225616,
+          53.037358900433894
+        ],
+        "epoch_time": [
+          0.2669496536254883,
+          0.23289227485656738,
+          0.24242162704467773
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [],
+        "n_params": 36256,
+        "estimated_flops_per_fwd": 919552,
+        "total_train_time_s": 0.7448463439941406,
+        "best_val_loss": 3.97099655015128,
+        "best_val_ppl": 53.037358900433894,
+        "profile": {
+          "latency_ms_mean": 2.765071392059326,
+          "latency_ms_std": 1.4120454788208008,
+          "latency_ms_min": 1.9376369714736938,
+          "latency_ms_max": 5.227342128753662,
+          "memory_mb": 673.66015625
+        }
+      },
+      "param_match_ratio": 0.9347418358340689
+    },
+    "chain_of_thought": {
+      "crf": {
+        "run_name": "crf_chain_of_thought",
+        "model_type": "crf",
+        "train_loss": [
+          4.256348657608032,
+          3.4800318813323976,
+          3.140351219177246
+        ],
+        "train_ppl": [
+          70.55190341594101,
+          32.46075695154935,
+          23.11198280498606
+        ],
+        "val_loss": [
+          3.7968495913914273,
+          3.237982681819371,
+          3.089341844831194
+        ],
+        "val_ppl": [
+          44.56057909538097,
+          25.482264026999776,
+          21.962618407140287
+        ],
+        "epoch_time": [
+          0.5113034248352051,
+          0.5319850444793701,
+          0.6767511367797852
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.3659710926668985,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.007496016366141183,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.5293827269758496,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.007629735129220145,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.5323664162840162,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.009133338928222656,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          }
+        ],
+        "n_params": 33890,
+        "estimated_flops_per_fwd": 858176,
+        "total_train_time_s": 1.7238280773162842,
+        "best_val_loss": 3.089341844831194,
+        "best_val_ppl": 21.962618407140287,
+        "profile": {
+          "latency_ms_mean": 11.260185241699219,
+          "latency_ms_std": 3.031129837036133,
+          "latency_ms_min": 9.239489555358887,
+          "latency_ms_max": 16.58299446105957,
+          "memory_mb": 670.27734375,
+          "crf_inference_metrics": {
+            "n_cells_mean": 544.0,
+            "n_cells_std": 0.0,
+            "n_cells_min": 544,
+            "n_cells_max": 544,
+            "specialization": 0.5279296696186065,
+            "comm_cost_mean": 6528.0,
+            "wall_time_mean": 0.011831951141357423,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 5
+          }
+        }
+      },
+      "transformer": {
+        "run_name": "transformer_chain_of_thought",
+        "model_type": "transformer",
+        "train_loss": [
+          4.5220294952392575,
+          4.284872798919678,
+          4.125786838531494
+        ],
+        "train_ppl": [
+          92.02216714362682,
+          72.59331218471138,
+          61.91650838320974
+        ],
+        "val_loss": [
+          4.40840448651995,
+          4.173003605433872,
+          4.095952374594552
+        ],
+        "val_ppl": [
+          82.13830612569046,
+          64.91012400343567,
+          60.09654633574549
+        ],
+        "epoch_time": [
+          0.31092071533203125,
+          0.23761796951293945,
+          0.25398850440979004
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [],
+        "n_params": 36256,
+        "estimated_flops_per_fwd": 919552,
+        "total_train_time_s": 0.8047454357147217,
+        "best_val_loss": 4.095952374594552,
+        "best_val_ppl": 60.09654633574549,
+        "profile": {
+          "latency_ms_mean": 2.764935255050659,
+          "latency_ms_std": 0.5319210886955261,
+          "latency_ms_min": 2.0793650150299072,
+          "latency_ms_max": 3.5046870708465576,
+          "memory_mb": 670.27734375
+        }
+      },
+      "param_match_ratio": 0.9347418358340689
+    },
+    "code": {
+      "crf": {
+        "run_name": "crf_code",
+        "model_type": "crf",
+        "train_loss": [
+          4.2810768795013425,
+          3.5629697227478028,
+          3.22800838470459
+        ],
+        "train_ppl": [
+          72.31827615889324,
+          35.267777301729055,
+          25.22935972248696
+        ],
+        "val_loss": [
+          3.858572244644165,
+          3.320585625512259,
+          3.175931828362601
+        ],
+        "val_ppl": [
+          47.3976308149158,
+          27.676553909566643,
+          23.94912594886052
+        ],
+        "epoch_time": [
+          0.8540616035461426,
+          0.9688863754272461,
+          0.6951673030853271
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.2859253074441637,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.0137765748160226,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.47941245777266367,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.013408149991716658,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          },
+          {
+            "n_cells_mean": 485.7142857142857,
+            "n_cells_std": 145.39012145996094,
+            "n_cells_min": 136,
+            "n_cells_max": 544,
+            "specialization": 0.4973660281726292,
+            "comm_cost_mean": 5828.571428571428,
+            "wall_time_mean": 0.010264124189104353,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 7
+          }
+        ],
+        "n_params": 33890,
+        "estimated_flops_per_fwd": 858176,
+        "total_train_time_s": 2.522127866744995,
+        "best_val_loss": 3.175931828362601,
+        "best_val_ppl": 23.94912594886052,
+        "profile": {
+          "latency_ms_mean": 10.584257125854492,
+          "latency_ms_std": 2.95802903175354,
+          "latency_ms_min": 8.551053047180176,
+          "latency_ms_max": 15.785101890563965,
+          "memory_mb": 670.28515625,
+          "crf_inference_metrics": {
+            "n_cells_mean": 544.0,
+            "n_cells_std": 0.0,
+            "n_cells_min": 544,
+            "n_cells_max": 544,
+            "specialization": 0.5022922456264496,
+            "comm_cost_mean": 6528.0,
+            "wall_time_mean": 0.010117912292480468,
+            "total_splits": 0,
+            "total_deaths": 0,
+            "total_merges": 0,
+            "splits_per_ex": 0.0,
+            "deaths_per_ex": 0.0,
+            "merges_per_ex": 0.0,
+            "n_examples": 5
+          }
+        }
+      },
+      "transformer": {
+        "run_name": "transformer_code",
+        "model_type": "transformer",
+        "train_loss": [
+          4.5118099975585935,
+          4.27990831375122,
+          4.129182052612305
+        ],
+        "train_ppl": [
+          91.08653580403697,
+          72.2338168560015,
+          62.12708545914854
+        ],
+        "val_loss": [
+          4.39645665032523,
+          4.170336791447231,
+          4.09909759249006
+        ],
+        "val_ppl": [
+          81.162770473721,
+          64.73725138887623,
+          60.28586063002771
+        ],
+        "epoch_time": [
+          0.36441516876220703,
+          0.2586696147918701,
+          0.33820652961730957
+        ],
+        "lr_trace": [
+          0.00029649160878721494,
+          0.00015344737385535664,
+          3.0220170969971686e-05
+        ],
+        "crf_metrics": [],
+        "n_params": 36256,
+        "estimated_flops_per_fwd": 919552,
+        "total_train_time_s": 0.9666538238525391,
+        "best_val_loss": 4.09909759249006,
+        "best_val_ppl": 60.28586063002771,
+        "profile": {
+          "latency_ms_mean": 4.288403511047363,
+          "latency_ms_std": 1.1588929891586304,
+          "latency_ms_min": 3.340430974960327,
+          "latency_ms_max": 5.731687068939209,
+          "memory_mb": 670.28515625
+        }
+      },
+      "param_match_ratio": 0.9347418358340689
+    }
+  }
+}
