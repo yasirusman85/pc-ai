@@ -23,7 +23,7 @@ setup(
     name="crf-reasoning",
     version="0.1.0",
     author="CRF Research Team",
-    author_email="your-email@example.com",
+    author_email="uyasir85@gmail.com",
     description="Cellular Reasoning Fabric: Adaptive computation via dynamic cell populations",
     long_description=long_description,
     long_description_content_type="text/markdown",
