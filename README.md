@@ -55,9 +55,7 @@ pip install -e .
 ### Basic Usage
 
 ```python
-from crf_vectorized import CRFLanguageModel, AblationConfig
-from data import get_datasets, make_dataloader
-from train import train
+from src.crf_reasoning import CRFLanguageModel, AblationConfig, get_datasets, make_dataloader, train
 
 # Load synthetic dataset
 train_ds, val_ds = get_datasets('synthetic', seq_len=64, max_train=1000, max_val=200)
@@ -98,7 +96,7 @@ parameter ~4×. Results are CPU-scale and must not be extrapolated to GPU-scale
 LLM training without new evidence.
 
 ```python
-from efficiency_benchmark import EfficiencyBenchmark
+from experiments.efficiency_benchmark import EfficiencyBenchmark
 
 # Run comparative efficiency benchmark
 benchmark = EfficiencyBenchmark()
@@ -277,7 +275,7 @@ pytest tests/test_crf.py::test_cell_population
 ### Mixed Precision Training
 
 ```python
-from train import train
+from src.crf_reasoning import train
 
 history = train(
     model, train_loader, val_loader,
