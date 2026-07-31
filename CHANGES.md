@@ -25,7 +25,6 @@ This document summarizes all the improvements made to transform the CRF (Cellula
   - Pull request process
   - Coding standards
   - Development workflow
-- **CODE_OF_CONDUCT.md**: Added community code of conduct based on Contributor Covenant
 
 ### 3. Configuration Management ✅
 - **config/default.yaml**: Default configuration with all hyperparameters
@@ -138,7 +137,6 @@ pc-ai/
 ├── requirements.txt          # Dependencies
 ├── README.md                 # Main documentation
 ├── CONTRIBUTING.md           # Contribution guidelines
-├── CODE_OF_CONDUCT.md        # Community guidelines
 ├── LICENSE                   # MIT License
 ├── .gitignore               # Git ignore patterns
 └── CHANGES.md               # This file
@@ -155,7 +153,7 @@ pc-ai/
 7. **CI/CD Pipeline**: Automated testing and quality checks
 8. **Configuration Management**: YAML-based configuration with validation
 9. **Documentation**: Complete setup, usage, and contribution guides
-10. **Community Standards**: Code of conduct and contribution guidelines
+10. **Community Standards**: Contribution guidelines
 
 ## Usage Examples
 
@@ -248,7 +246,7 @@ These improvements transform the CRF codebase from a research prototype into a p
 
 - **Researchers can use**: Easy installation, clear documentation, reproducible experiments
 - **Developers can extend**: Proper testing, modular structure, contribution guidelines
-- **Community can grow**: Open-source license, code of conduct, CI/CD quality assurance
+- **Community can grow**: Open-source license and CI/CD quality assurance
 - **Experiments are trackable**: Automatic logging, configuration management, dataset versioning
 
 The codebase now follows best practices for machine learning research projects and is ready for serious research collaboration and publication.

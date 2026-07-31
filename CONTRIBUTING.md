@@ -2,10 +2,6 @@
 
 Thank you for your interest in contributing to CRF! This document provides guidelines and instructions for contributing to the project.
 
-## Code of Conduct
-
-This project adheres to a code of conduct that all contributors must follow. Please see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
-
 ## How to Contribute
 
 ### Reporting Bugs

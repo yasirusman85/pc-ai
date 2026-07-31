@@ -250,7 +250,7 @@ We welcome contributions! Please see CONTRIBUTING.md for guidelines.
 
 ## Contact
 
-For questions and issues, please open a GitHub issue or contact [your-email@example.com].
+For questions and issues, please open a GitHub issue or contact [uyasir85@gmail.com].
 
 ## Roadmap
 
