@@ -20,6 +20,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from spatial_routing import sublinear_topk_neighbors, sublinear_merge_candidates
+
 
 # ─── Ablation Configuration ────────────────────────────────────────────────
 
@@ -34,6 +36,10 @@ class AblationConfig:
     use_messaging: bool = True  # cells receive neighbor messages (False → self only)
     use_spatial:  bool = True   # spatial penalty in similarity (False → pure cosine)
     spatial_lambda: float = 0.05  # weight of spatial distance penalty
+    use_sublinear_routing: bool = True  # O(N·m) grid routing vs O(N²) dense
+    routing_grid_size: float = 1.0
+    routing_search_radius: int = 1
+    routing_max_candidates: int = 32
 
 
 # ─── Per-forward-pass metrics ──────────────────────────────────────────────
@@ -111,24 +117,28 @@ class VectorizedFabric(nn.Module):
         if N <= 1:
             return states.clone()
 
-        # Step 1: similarity matrix
-        s_norm = F.normalize(states, dim=-1)          # N×d
-        sim    = s_norm @ s_norm.T                    # N×N
-
-        if cfg.use_spatial:
-            pos_dist = torch.cdist(positions, positions)   # N×N
-            sim = sim - cfg.spatial_lambda * pos_dist
-
-        # Batch isolation: mask cross-batch edges (Fix 2)
-        if batch_id is not None:
-            same_batch = batch_id.unsqueeze(0) == batch_id.unsqueeze(1)
-            sim = sim.masked_fill(~same_batch, float('-inf'))
-
-        sim.fill_diagonal_(float('-inf'))
-
-        # Step 2: top-k neighbors
+        # Step 1–2: k-NN neighbors (sub-linear or dense fallback)
         k = min(self.k, N - 1)
-        _, top_idx = sim.topk(k, dim=-1)              # N×k  (indices)
+        if cfg.use_sublinear_routing:
+            top_idx, _ = sublinear_topk_neighbors(
+                states, positions, k,
+                spatial_lambda=cfg.spatial_lambda,
+                use_spatial=cfg.use_spatial,
+                grid_size=cfg.routing_grid_size,
+                search_radius=cfg.routing_search_radius,
+                max_candidates=cfg.routing_max_candidates,
+                batch_id=batch_id,
+            )
+        else:
+            s_norm = F.normalize(states, dim=-1)
+            sim = s_norm @ s_norm.T
+            if cfg.use_spatial:
+                sim = sim - cfg.spatial_lambda * torch.cdist(positions, positions)
+            if batch_id is not None:
+                same_batch = batch_id.unsqueeze(0) == batch_id.unsqueeze(1)
+                sim = sim.masked_fill(~same_batch, float('-inf'))
+            sim.fill_diagonal_(float('-inf'))
+            _, top_idx = sim.topk(k, dim=-1)
 
         # Step 3: routing weights
         if cfg.use_routing:
@@ -261,32 +271,41 @@ class CellPopulation:
         if not cfg.use_merge or self.N < 3:
             return
 
-        s_norm = F.normalize(self.states, dim=-1)
-        sim    = s_norm @ s_norm.T                  # N×N
-
-        # zero out anchor-anchor and self pairs
-        both_anchors = self.anchor_mask.unsqueeze(0) & self.anchor_mask.unsqueeze(1)
-        sim = sim.masked_fill(torch.eye(self.N, dtype=torch.bool, device=self.device), -1)
-        sim = sim.masked_fill(both_anchors, -1)
-
         n_candidates = max(1, self.N // 20)
-        # find top candidates by flattening upper triangle
-        upper = torch.triu(sim, diagonal=1)
-        flat  = upper.reshape(-1)
-        top_k = min(n_candidates, (flat > tau).sum().item())
-        if top_k == 0:
+        if cfg.use_sublinear_routing:
+            pair_list = sublinear_merge_candidates(
+                self.states, self.positions, self.anchor_mask, tau=tau,
+                grid_size=cfg.routing_grid_size,
+                search_radius=cfg.routing_search_radius,
+                max_pairs=n_candidates,
+            )
+        else:
+            s_norm = F.normalize(self.states, dim=-1)
+            sim = s_norm @ s_norm.T
+            both_anchors = self.anchor_mask.unsqueeze(0) & self.anchor_mask.unsqueeze(1)
+            sim = sim.masked_fill(torch.eye(self.N, dtype=torch.bool, device=self.device), -1)
+            sim = sim.masked_fill(both_anchors, -1)
+            upper = torch.triu(sim, diagonal=1)
+            flat = upper.reshape(-1)
+            top_k = min(n_candidates, (flat > tau).sum().item())
+            if top_k == 0:
+                return
+            _, flat_idx = flat.topk(top_k)
+            pair_list = [
+                (fi.item() // self.N, fi.item() % self.N, flat[fi].item())
+                for fi in flat_idx
+            ]
+
+        if not pair_list:
             return
 
-        _, flat_idx = flat.topk(top_k)
         merged = torch.zeros(self.N, dtype=torch.bool, device=self.device)
         remove = torch.zeros(self.N, dtype=torch.bool, device=self.device)
 
-        for fi in flat_idx:
-            i = fi.item() // self.N
-            j = fi.item() %  self.N
+        for i, j, sim_ij in pair_list:
             if merged[i] or merged[j]:
                 continue
-            if sim[i, j].item() < tau:
+            if sim_ij < tau:
                 continue
             # merge j into i
             self.states[i]    = (self.states[i] + self.states[j]) / 2

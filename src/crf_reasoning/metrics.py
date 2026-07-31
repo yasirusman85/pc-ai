@@ -43,34 +43,61 @@ def estimate_crf_flops(
     d_h: int,       # hidden dim of CellProgram
     k: int,         # neighbors
     S: int,         # steps
+    use_sublinear: bool = True,
+    max_candidates: int = 32,
 ) -> int:
     """
     Estimates FLOPs for one CRF forward pass (one sequence).
 
     Per step:
-      - Cosine similarity matrix: 2*N^2*d  (normalize + matmul)
-      - Spatial distance:          N^2
-      - Top-k selection:           N^2  (topk is O(N^2) worst case)
-      - Routing gate (N*k pairs):  2 * N*k * 2d  = 4*N*k*d
-      - Message aggregation:       N*k*d
-      - CellProgram gate MLP:      2d*d_h + d_h*d per cell = N*(2d*d_h + d_h*d)
-      - CellProgram msg proj:      N*d*d
-      - Energy gate:               N*d
+      - Routing: O(N·m·d) sub-linear or O(N²d) dense
+      - CellProgram gate MLP, msg proj, energy gate
     """
+    if use_sublinear:
+        from spatial_routing import estimate_sublinear_routing_flops
+        routing = estimate_sublinear_routing_flops(N, d, k, max_candidates)
+    else:
+        routing = (
+            2 * N * N * d +   # cosine sim
+            N * N +           # spatial dist
+            N * N +           # topk
+            4 * N * k * d +   # routing gate
+            N * k * d         # aggregation
+        )
+
     per_step = (
-        2 * N * N * d      +   # cosine sim
-        N * N              +   # spatial dist
-        N * N              +   # topk
-        4 * N * k * d      +   # routing gate
-        N * k * d          +   # aggregation
-        N * (2 * d * d_h)  +   # gate W1
-        N * (d_h * d)      +   # gate W2
-        N * d * d          +   # msg proj
-        N * d              +   # energy gate
-        N * d              +   # layernorm
-        N                  +   # energy update
-    0)
+        routing +
+        N * (2 * d * d_h) +   # gate W1
+        N * (d_h * d) +       # gate W2
+        N * d * d +           # msg proj
+        N * d +               # energy gate
+        N * d +               # layernorm
+        N                     # energy update
+    )
     return per_step * S
+
+
+def evaluate_crf_flops(
+    N: int,
+    d: int,
+    d_h: int,
+    k: int,
+    S: int,
+    use_sublinear: bool = True,
+    max_candidates: int = 32,
+) -> int:
+    """Alias for estimate_crf_flops (used by __init__ exports)."""
+    return estimate_crf_flops(N, d, d_h, k, S, use_sublinear, max_candidates)
+
+
+def evaluate_transformer_flops(
+    T: int,
+    d: int,
+    L: int,
+    d_ff: Optional[int] = None,
+) -> int:
+    """Alias for estimate_transformer_flops."""
+    return estimate_transformer_flops(T, d, L, d_ff)
 
 
 def estimate_transformer_flops(
