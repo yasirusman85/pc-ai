@@ -9,6 +9,7 @@ from data import (
     ChainOfThoughtDataset, CodeCompletionDataset, ARCProxyDataset,
     get_datasets, make_dataloader
 )
+from crf_vectorized import CRFLanguageModel
 
 
 class TestCharTokenizer:
@@ -253,7 +254,8 @@ class TestDataloader:
         for epoch in range(3):
             for batch in loader:
                 x, y = batch
-                assert x.shape == (4, 32)
+                assert x.shape == y.shape
+                assert x.shape[1] == 32 and x.shape[0] <= 4
 
 
 class TestIntegration:

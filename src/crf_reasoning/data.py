@@ -455,17 +455,24 @@ class ARCProxyDataset(Dataset):
 # ─── Convenience factory ─────────────────────────────────────────────────────
 
 def make_dataloader(
-    dataset:    Dataset,
-    batch_size: int  = 32,
-    shuffle:    bool = True,
-    num_workers: int = 0,
+    dataset:     Dataset,
+    batch_size:  int  = 32,
+    shuffle:     bool = True,
+    num_workers: int  = 0,
+    seed:        Optional[int] = None,
+    drop_last:   bool = False,
 ) -> DataLoader:
+    generator = None
+    if seed is not None:
+        generator = torch.Generator().manual_seed(seed)
     return DataLoader(
         dataset,
         batch_size=batch_size,
         shuffle=shuffle,
         num_workers=num_workers,
         pin_memory=False,
+        generator=generator,
+        drop_last=drop_last,
     )
 
 
@@ -534,9 +541,14 @@ def get_datasets(
         train_ds, val_ds = get_shakespeare_datasets(
             seq_len=seq_len, train_ratio=0.9, tokenizer=tok
         )
-    else:  # synthetic
+    elif name == 'synthetic':
         train_ds = SyntheticDataset(max_train, seq_len, seed=0,  tokenizer=tok)
         val_ds   = SyntheticDataset(max_val,   seq_len, seed=99, tokenizer=tok)
+    else:
+        raise ValueError(
+            f"Unknown dataset name {name!r}. Valid: synthetic, tinystories, "
+            f"arithmetic, arc, chain_of_thought, code, humaneval, gsm8k, shakespeare"
+        )
 
     return train_ds, val_ds
 

@@ -213,9 +213,11 @@ def train_budget(
             prev_eval = (tokens_seen // eval_interval) * eval_interval
             if tokens_seen >= eval_interval and (tokens_seen - tokens_here) < prev_eval:
                 val_loss, val_acc = evaluate()
-                est_flops = (estimate_crf_flops(model.crf.n_init, model.crf.d_model,
+                est_flops = (estimate_crf_flops(model.crf.max_cells, model.crf.d_model,
                                                 model.crf.program.gate[0].out_features,
-                                                model.crf.fabric.k, model.n_crf_steps)
+                                                model.crf.fabric.k, model.n_crf_steps,
+                                                max_candidates=model.cfg.routing_max_candidates,
+                                                search_radius=model.cfg.routing_search_radius)
                              if model_type == 'crf'
                              else estimate_transformer_flops(T, model.d_model, len(model.blocks)))
                 snap = EfficiencySnapshot(tokens_seen=tokens_seen, wall_time_s=time.time()-t_start,
@@ -227,9 +229,11 @@ def train_budget(
                           f"val_acc={val_acc:.4f} t={snap.wall_time_s:.1f}s")
     val_loss, val_acc = evaluate()
     if model_type == 'crf':
-        est_flops = estimate_crf_flops(model.crf.n_init, model.crf.d_model,
+        est_flops = estimate_crf_flops(model.crf.max_cells, model.crf.d_model,
                                        model.crf.program.gate[0].out_features,
-                                       model.crf.fabric.k, model.n_crf_steps)
+                                       model.crf.fabric.k, model.n_crf_steps,
+                                       max_candidates=model.cfg.routing_max_candidates,
+                                       search_radius=model.cfg.routing_search_radius)
     else:
         est_flops = estimate_transformer_flops(T, model.d_model, len(model.blocks))
     final = EfficiencySnapshot(tokens_seen=tokens_seen, wall_time_s=time.time()-t_start,
@@ -270,9 +274,11 @@ def run_experiment(
     crf = make_crf(mcfg, 'full')
     if tr_match == 'flop':
         from train import make_flop_matched_transformer
-        crf_fwd = estimate_crf_flops(crf.crf.n_init, crf.crf.d_model,
+        crf_fwd = estimate_crf_flops(crf.crf.max_cells, crf.crf.d_model,
                                      crf.crf.program.gate[0].out_features,
-                                     crf.crf.fabric.k, crf.n_crf_steps)
+                                     crf.crf.fabric.k, crf.n_crf_steps,
+                                     max_candidates=crf.cfg.routing_max_candidates,
+                                     search_radius=crf.cfg.routing_search_radius)
         tr = make_flop_matched_transformer(vocab_size=tok.vocab_size,
                                            target_flops=crf_fwd, seq_len=seq_len,
                                            max_seq_len=seq_len)

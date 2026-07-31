@@ -20,7 +20,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from spatial_routing import sublinear_topk_neighbors, sublinear_merge_candidates
+try:
+    from .spatial_routing import sublinear_topk_neighbors, sublinear_merge_candidates
+except ImportError:
+    from spatial_routing import sublinear_topk_neighbors, sublinear_merge_candidates
 
 
 # ─── Ablation Configuration ────────────────────────────────────────────────

@@ -152,8 +152,10 @@ class EfficiencyBenchmark:
             
             # Estimate FLOPs for this epoch
             batch_flops = estimate_crf_flops(
-                config['n_init_cells'], config['d_model'], 
-                config['d_hidden'], config['k_neighbors'], config['n_crf_steps']
+                config['max_cells'], config['d_model'],
+                config['d_hidden'], config['k_neighbors'], config['n_crf_steps'],
+                max_candidates=config.get('routing_max_candidates', 32),
+                search_radius=config.get('routing_search_radius', 1),
             )
             epoch_flops = batch_flops * len(train_loader)
             

@@ -38,24 +38,32 @@ def bits_per_char(losses: List[float]) -> float:
 # ─── FLOPs estimator ─────────────────────────────────────────────────────────
 
 def estimate_crf_flops(
-    N: int,         # number of cells
+    N: int,         # number of cells (use the real population size the fabric sees)
     d: int,         # state dimension
     d_h: int,       # hidden dim of CellProgram
     k: int,         # neighbors
     S: int,         # steps
     use_sublinear: bool = True,
     max_candidates: int = 32,
+    search_radius: int = 1,
+    fallback_threshold: int = 64,
 ) -> int:
     """
     Estimates FLOPs for one CRF forward pass (one sequence).
 
+    Routing cost is charged for the path the code actually takes:
+      - N ≤ fallback_threshold  → dense O(N²) routing (code uses dense fallback)
+      - otherwise               → sub-linear O(N·m·d) grid routing
+
     Per step:
-      - Routing: O(N·m·d) sub-linear or O(N²d) dense
+      - Routing (dense or sub-linear)
       - CellProgram gate MLP, msg proj, energy gate
     """
-    if use_sublinear:
+    if use_sublinear and N > fallback_threshold:
         from spatial_routing import estimate_sublinear_routing_flops
-        routing = estimate_sublinear_routing_flops(N, d, k, max_candidates)
+        routing = estimate_sublinear_routing_flops(
+            N, d, k, max_candidates, search_radius,
+        )
     else:
         routing = (
             2 * N * N * d +   # cosine sim
@@ -85,9 +93,12 @@ def evaluate_crf_flops(
     S: int,
     use_sublinear: bool = True,
     max_candidates: int = 32,
+    search_radius: int = 1,
+    fallback_threshold: int = 64,
 ) -> int:
     """Alias for estimate_crf_flops (used by __init__ exports)."""
-    return estimate_crf_flops(N, d, d_h, k, S, use_sublinear, max_candidates)
+    return estimate_crf_flops(N, d, d_h, k, S, use_sublinear, max_candidates,
+                              search_radius, fallback_threshold)
 
 
 def evaluate_transformer_flops(
