@@ -19,103 +19,134 @@ from typing import Dict, Optional
 
 from .crf_vectorized import AblationConfig, CRFLanguageModel
 
-
 # ─── Named ablation registry ─────────────────────────────────────────────────
 
 ABLATION_CONFIGS: Dict[str, AblationConfig] = {
-    'full': AblationConfig(
-        use_split=True, use_death=True, use_merge=True,
-        use_routing=True, use_energy=True,
-        use_messaging=True, use_spatial=True,
+    "full": AblationConfig(
+        use_split=True,
+        use_death=True,
+        use_merge=True,
+        use_routing=True,
+        use_energy=True,
+        use_messaging=True,
+        use_spatial=True,
     ),
-    'no_split_death': AblationConfig(
-        use_split=False, use_death=False, use_merge=True,
-        use_routing=True, use_energy=True,
-        use_messaging=True, use_spatial=True,
+    "no_split_death": AblationConfig(
+        use_split=False,
+        use_death=False,
+        use_merge=True,
+        use_routing=True,
+        use_energy=True,
+        use_messaging=True,
+        use_spatial=True,
     ),
-    'no_merge': AblationConfig(
-        use_split=True, use_death=True, use_merge=False,
-        use_routing=True, use_energy=True,
-        use_messaging=True, use_spatial=True,
+    "no_merge": AblationConfig(
+        use_split=True,
+        use_death=True,
+        use_merge=False,
+        use_routing=True,
+        use_energy=True,
+        use_messaging=True,
+        use_spatial=True,
     ),
-    'no_routing': AblationConfig(
-        use_split=True, use_death=True, use_merge=True,
-        use_routing=False, use_energy=True,
-        use_messaging=True, use_spatial=True,
+    "no_routing": AblationConfig(
+        use_split=True,
+        use_death=True,
+        use_merge=True,
+        use_routing=False,
+        use_energy=True,
+        use_messaging=True,
+        use_spatial=True,
     ),
-    'no_energy': AblationConfig(
-        use_split=True, use_death=True, use_merge=True,
-        use_routing=True, use_energy=False,
-        use_messaging=True, use_spatial=True,
+    "no_energy": AblationConfig(
+        use_split=True,
+        use_death=True,
+        use_merge=True,
+        use_routing=True,
+        use_energy=False,
+        use_messaging=True,
+        use_spatial=True,
     ),
-    'no_messaging': AblationConfig(
-        use_split=False, use_death=False, use_merge=False,
-        use_routing=False, use_energy=True,
-        use_messaging=False, use_spatial=True,
+    "no_messaging": AblationConfig(
+        use_split=False,
+        use_death=False,
+        use_merge=False,
+        use_routing=False,
+        use_energy=True,
+        use_messaging=False,
+        use_spatial=True,
     ),
-    'no_spatial': AblationConfig(
-        use_split=True, use_death=True, use_merge=True,
-        use_routing=True, use_energy=True,
-        use_messaging=True, use_spatial=False,
+    "no_spatial": AblationConfig(
+        use_split=True,
+        use_death=True,
+        use_merge=True,
+        use_routing=True,
+        use_energy=True,
+        use_messaging=True,
+        use_spatial=False,
     ),
 }
 
 # Human-readable descriptions for the report table
 ABLATION_DESCRIPTIONS: Dict[str, str] = {
-    'full':           'Full CRF (all mechanisms)',
-    'no_split_death': 'No split/death (fixed population)',
-    'no_merge':       'No merge (no consolidation)',
-    'no_routing':     'No routing gate (uniform mean)',
-    'no_energy':      'No energy (constant ε=1, random lifecycle)',
-    'no_messaging':   'No messaging (independent cells)',
-    'no_spatial':     'No spatial penalty (pure cosine)',
+    "full": "Full CRF (all mechanisms)",
+    "no_split_death": "No split/death (fixed population)",
+    "no_merge": "No merge (no consolidation)",
+    "no_routing": "No routing gate (uniform mean)",
+    "no_energy": "No energy (constant ε=1, random lifecycle)",
+    "no_messaging": "No messaging (independent cells)",
+    "no_spatial": "No spatial penalty (pure cosine)",
 }
 
 
 # ─── Model factory ───────────────────────────────────────────────────────────
 
+
 @dataclass
 class ModelConfig:
     """Hyperparameters for CRFLanguageModel."""
-    vocab_size:   int   = 99
-    d_model:      int   = 128
-    d_hidden:     int   = 64
-    n_init_cells: int   = 32
-    max_cells:    int   = 128
-    n_crf_steps:  int   = 6
-    k_neighbors:  int   = 4
-    max_seq_len:  int   = 128
+
+    vocab_size: int = 99
+    d_model: int = 128
+    d_hidden: int = 64
+    n_init_cells: int = 32
+    max_cells: int = 128
+    n_crf_steps: int = 6
+    k_neighbors: int = 4
+    max_seq_len: int = 128
 
 
 def make_crf(
     model_cfg: ModelConfig,
-    ablation:  str = 'full',
+    ablation: str = "full",
 ) -> CRFLanguageModel:
     """
     Creates a CRFLanguageModel with the given ablation config.
     """
     if ablation not in ABLATION_CONFIGS:
-        raise ValueError(f"Unknown ablation '{ablation}'. "
-                         f"Choose from: {list(ABLATION_CONFIGS.keys())}")
+        raise ValueError(
+            f"Unknown ablation '{ablation}'. "
+            f"Choose from: {list(ABLATION_CONFIGS.keys())}"
+        )
 
     cfg = ABLATION_CONFIGS[ablation]
     return CRFLanguageModel(
-        vocab_size   = model_cfg.vocab_size,
-        d_model      = model_cfg.d_model,
-        d_hidden     = model_cfg.d_hidden,
-        n_init_cells = model_cfg.n_init_cells,
-        max_cells    = model_cfg.max_cells,
-        n_crf_steps  = model_cfg.n_crf_steps,
-        k_neighbors  = model_cfg.k_neighbors,
-        max_seq_len  = model_cfg.max_seq_len,
-        cfg          = cfg,
+        vocab_size=model_cfg.vocab_size,
+        d_model=model_cfg.d_model,
+        d_hidden=model_cfg.d_hidden,
+        n_init_cells=model_cfg.n_init_cells,
+        max_cells=model_cfg.max_cells,
+        n_crf_steps=model_cfg.n_crf_steps,
+        k_neighbors=model_cfg.k_neighbors,
+        max_seq_len=model_cfg.max_seq_len,
+        cfg=cfg,
     )
 
 
 def make_transformer(
-    model_cfg:    ModelConfig,
+    model_cfg: ModelConfig,
     target_params: Optional[int] = None,
-) -> 'GPT':
+) -> "GPT":
     """
     Creates a FLOPs-/param-matched Transformer.
     If target_params is None, uses a fixed small GPT that roughly matches
@@ -133,20 +164,21 @@ def make_transformer(
                 n_heads = h
                 break
         return GPT(
-            vocab_size  = model_cfg.vocab_size,
-            d_model     = d,
-            n_heads     = n_heads,
-            n_layers    = 4,
-            max_seq_len = model_cfg.max_seq_len,
-            dropout     = 0.0,
-            tie_weights = True,
+            vocab_size=model_cfg.vocab_size,
+            d_model=d,
+            n_heads=n_heads,
+            n_layers=4,
+            max_seq_len=model_cfg.max_seq_len,
+            dropout=0.0,
+            tie_weights=True,
         )
     else:
         from scripts.train import make_matched_transformer
+
         return make_matched_transformer(
-            vocab_size    = model_cfg.vocab_size,
-            target_params = target_params,
-            max_seq_len   = model_cfg.max_seq_len,
+            vocab_size=model_cfg.vocab_size,
+            target_params=target_params,
+            max_seq_len=model_cfg.max_seq_len,
         )
 
 
@@ -157,21 +189,27 @@ def list_ablations() -> None:
     print(f"{'='*60}")
     for name, desc in ABLATION_DESCRIPTIONS.items():
         cfg = ABLATION_CONFIGS[name]
-        flags = '  '.join(
+        flags = "  ".join(
             f"{k[4:]}={'Y' if v else 'N'}"
             for k, v in asdict(cfg).items()
-            if k.startswith('use_')
+            if k.startswith("use_")
         )
         print(f"  {name:<18} {desc}")
         print(f"  {'':18} [{flags}]")
     print(f"{'='*60}\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     list_ablations()
 
-    cfg = ModelConfig(vocab_size=99, d_model=64, d_hidden=32,
-                      n_init_cells=16, max_cells=64, n_crf_steps=4)
+    cfg = ModelConfig(
+        vocab_size=99,
+        d_model=64,
+        d_hidden=32,
+        n_init_cells=16,
+        max_cells=64,
+        n_crf_steps=4,
+    )
     for name in ABLATION_CONFIGS:
         m = make_crf(cfg, name)
         p = sum(x.numel() for x in m.parameters() if x.requires_grad)

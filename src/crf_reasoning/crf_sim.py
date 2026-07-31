@@ -9,28 +9,29 @@ import math
 import random
 from collections import Counter
 
-DEVICE = torch.device('cpu')
+DEVICE = torch.device("cpu")
 INT_MAX = 2**15 - 1
 
 # ─── DSL ──────────────────────────────────────────────────────────────────
 
 OPS = {
-    0: ('NOP', 0),    # no-op
-    1: ('MOV', 2),    # MOV dst src   (copy value)
-    2: ('ADD', 3),    # ADD dst a b
-    3: ('SUB', 3),    # SUB dst a b
-    4: ('MUL', 3),    # MUL dst a b
-    5: ('DIV', 3),    # DIV dst a b
-    6: ('LT',  3),    # LT  dst a b   (1 if a < b else 0)
-    7: ('GT',  3),    # GT  dst a b
-    8: ('EQ',  3),    # EQ  dst a b
-    9: ('SEND', 2),   # SEND addr val
-   10: ('RECV', 2),   # RECV dst addr
-   11: ('MEMW', 2),   # MEMW key val
-   12: ('MEMR', 2),   # MEMR dst key
-   13: ('VOTE', 1),   # VOTE val     (register output vote)
-   14: ('SPLT', 0),   # SPLT        (request split)
+    0: ("NOP", 0),  # no-op
+    1: ("MOV", 2),  # MOV dst src   (copy value)
+    2: ("ADD", 3),  # ADD dst a b
+    3: ("SUB", 3),  # SUB dst a b
+    4: ("MUL", 3),  # MUL dst a b
+    5: ("DIV", 3),  # DIV dst a b
+    6: ("LT", 3),  # LT  dst a b   (1 if a < b else 0)
+    7: ("GT", 3),  # GT  dst a b
+    8: ("EQ", 3),  # EQ  dst a b
+    9: ("SEND", 2),  # SEND addr val
+    10: ("RECV", 2),  # RECV dst addr
+    11: ("MEMW", 2),  # MEMW key val
+    12: ("MEMR", 2),  # MEMR dst key
+    13: ("VOTE", 1),  # VOTE val     (register output vote)
+    14: ("SPLT", 0),  # SPLT        (request split)
 }
+
 
 class Interpreter:
     def __init__(self, registers, memory, messages_in):
@@ -48,61 +49,61 @@ class Interpreter:
             if ip >= plen:
                 break
             opcode = int(prog[ip])
-            if opcode == 0:   # NOP
+            if opcode == 0:  # NOP
                 ip += 1
-            elif opcode == 1 and ip + 2 < plen: # MOV
-                dst, src = int(prog[ip+1]), int(prog[ip+2])
+            elif opcode == 1 and ip + 2 < plen:  # MOV
+                dst, src = int(prog[ip + 1]), int(prog[ip + 2])
                 self._wr(dst, self._val(src))
                 ip += 3
-            elif opcode == 2 and ip + 3 < plen: # ADD
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 2 and ip + 3 < plen:  # ADD
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, self._val(a) + self._val(b))
                 ip += 4
-            elif opcode == 3 and ip + 3 < plen: # SUB
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 3 and ip + 3 < plen:  # SUB
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, self._val(a) - self._val(b))
                 ip += 4
-            elif opcode == 4 and ip + 3 < plen: # MUL
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 4 and ip + 3 < plen:  # MUL
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, self._val(a) * self._val(b))
                 ip += 4
-            elif opcode == 5 and ip + 3 < plen: # DIV
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 5 and ip + 3 < plen:  # DIV
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 bv = self._val(b)
                 self._wr(d, self._val(a) / bv if bv != 0 else 0)
                 ip += 4
-            elif opcode == 6 and ip + 3 < plen: # LT
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 6 and ip + 3 < plen:  # LT
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, 1.0 if self._val(a) < self._val(b) else 0.0)
                 ip += 4
-            elif opcode == 7 and ip + 3 < plen: # GT
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 7 and ip + 3 < plen:  # GT
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, 1.0 if self._val(a) > self._val(b) else 0.0)
                 ip += 4
-            elif opcode == 8 and ip + 3 < plen: # EQ
-                d, a, b = int(prog[ip+1]), int(prog[ip+2]), int(prog[ip+3])
+            elif opcode == 8 and ip + 3 < plen:  # EQ
+                d, a, b = int(prog[ip + 1]), int(prog[ip + 2]), int(prog[ip + 3])
                 self._wr(d, 1.0 if abs(self._val(a) - self._val(b)) < 1e-6 else 0.0)
                 ip += 4
-            elif opcode == 9 and ip + 2 < plen: # SEND
-                addr, val = int(prog[ip+1]), int(prog[ip+2])
+            elif opcode == 9 and ip + 2 < plen:  # SEND
+                addr, val = int(prog[ip + 1]), int(prog[ip + 2])
                 self.outbox[int(addr)] = self._val(val)
                 ip += 3
-            elif opcode == 10 and ip + 2 < plen: # RECV
-                dst, addr = int(prog[ip+1]), int(prog[ip+2])
+            elif opcode == 10 and ip + 2 < plen:  # RECV
+                dst, addr = int(prog[ip + 1]), int(prog[ip + 2])
                 self._wr(dst, self.msg.get(int(addr), 0.0))
                 ip += 3
-            elif opcode == 11 and ip + 2 < plen: # MEMW
-                k, v = int(prog[ip+1]), int(prog[ip+2])
+            elif opcode == 11 and ip + 2 < plen:  # MEMW
+                k, v = int(prog[ip + 1]), int(prog[ip + 2])
                 self.mem[int(k)] = self._val(v)
                 ip += 3
-            elif opcode == 12 and ip + 2 < plen: # MEMR
-                dst, k = int(prog[ip+1]), int(prog[ip+2])
+            elif opcode == 12 and ip + 2 < plen:  # MEMR
+                dst, k = int(prog[ip + 1]), int(prog[ip + 2])
                 self._wr(dst, self.mem.get(int(k), 0.0))
                 ip += 3
-            elif opcode == 13 and ip + 1 < plen: # VOTE
-                self.vote = self._val(int(prog[ip+1]))
+            elif opcode == 13 and ip + 1 < plen:  # VOTE
+                self.vote = self._val(int(prog[ip + 1]))
                 ip += 2
-            elif opcode == 14: # SPLT
+            elif opcode == 14:  # SPLT
                 self.split_request = True
                 ip += 1
             else:
@@ -120,6 +121,7 @@ class Interpreter:
 
 
 # ─── CELL ─────────────────────────────────────────────────────────────────
+
 
 class Cell:
     def __init__(self, cid, program, state_dim=64, mem_size=16):
@@ -173,6 +175,7 @@ class Cell:
 
 # ─── FABRIC (communication graph) ────────────────────────────────────────
 
+
 class SparseGraph:
     def __init__(self, k=4):
         self.k = k
@@ -213,6 +216,7 @@ class SparseGraph:
 
 # ─── LIFECYCLE SCHEDULER ─────────────────────────────────────────────────
 
+
 class Scheduler:
     def __init__(self, max_cells=1000):
         self.max_cells = max_cells
@@ -224,40 +228,47 @@ class Scheduler:
 
         for cell in cells[:]:
             if cell.age % 5 == 0:
-                if (cell.energy > 1.8 and len(cells) < self.max_cells
-                        and cell.age > 3 and random.random() < 0.3):
+                if (
+                    cell.energy > 1.8
+                    and len(cells) < self.max_cells
+                    and cell.age > 3
+                    and random.random() < 0.3
+                ):
                     child = Cell(len(cells), cell.mutate(0.3), cell.state_dim)
                     child.energy = cell.energy * 0.4
                     cell.energy *= 0.4
                     child.state = [s + random.uniform(-0.1, 0.1) for s in cell.state]
                     cells.append(child)
-                    changes.append(f'split c{cell.cid} -> c{child.cid}')
+                    changes.append(f"split c{cell.cid} -> c{child.cid}")
 
         for cell in cells[:]:
             if cell.energy < 0.01 and cell.age > 5:
                 cells.remove(cell)
-                changes.append(f'die c{cell.cid}')
+                changes.append(f"die c{cell.cid}")
 
         if len(cells) > 2 and self.step % 5 == 0:
             pairs = []
             for i in range(len(cells)):
                 for j in range(i + 1, len(cells)):
-                    sim = sum(abs(a - b) for a, b in zip(cells[i].state, cells[j].state))
+                    sim = sum(
+                        abs(a - b) for a, b in zip(cells[i].state, cells[j].state)
+                    )
                     pairs.append((sim, i, j))
             pairs.sort()
             merged = set()
-            for sim, i, j in pairs[:max(1, len(cells) // 20)]:
+            for sim, i, j in pairs[: max(1, len(cells) // 20)]:
                 if i not in merged and j not in merged and sim < 1.0:
                     cells[min(i, j)].merge_state_with(cells[max(i, j)])
                     cells.pop(max(i, j))
                     merged.add(min(i, j))
                     merged.add(max(i, j))
-                    changes.append(f'merge c{i} c{j}')
+                    changes.append(f"merge c{i} c{j}")
 
         return changes
 
 
 # ─── CONSENSUS ────────────────────────────────────────────────────────────
+
 
 class Consensus:
     def aggregate(self, cells, n_classes=10):
@@ -275,6 +286,7 @@ class Consensus:
 
 # ─── SIMULATOR ────────────────────────────────────────────────────────────
 
+
 class CRFSimulator:
     def __init__(self, n_init=200, max_cells=1000, state_dim=64, k_neighbors=4):
         self.n_init = n_init
@@ -287,13 +299,17 @@ class CRFSimulator:
     def seed(self, input_vec, n_cells=None):
         n = n_cells or self.n_init
         self.input_vec = input_vec
-        d = len(input_vec) if hasattr(input_vec, '__len__') else self.state_dim
+        d = len(input_vec) if hasattr(input_vec, "__len__") else self.state_dim
         self.cells = []
         for i in range(n):
-            prog = [random.randint(0, len(OPS) - 1) for _ in range(random.randint(4, 16))]
+            prog = [
+                random.randint(0, len(OPS) - 1) for _ in range(random.randint(4, 16))
+            ]
             cell = Cell(i, prog, self.state_dim)
             if i < d:
-                cell.registers[0] = input_vec[i] if hasattr(input_vec, '__getitem__') else input_vec
+                cell.registers[0] = (
+                    input_vec[i] if hasattr(input_vec, "__getitem__") else input_vec
+                )
             self.cells.append(cell)
 
     def step(self):
@@ -321,6 +337,7 @@ class CRFSimulator:
 
 # ─── BENCHMARK HELPERS ───────────────────────────────────────────────────
 
+
 def encode_arc_grid(grid, max_dim=64):
     flat = []
     for row in grid:
@@ -328,6 +345,7 @@ def encode_arc_grid(grid, max_dim=64):
     while len(flat) < max_dim:
         flat.append(0.0)
     return flat[:max_dim]
+
 
 def eval_arc(sim, grid, n_steps=20):
     inp = encode_arc_grid(grid)
@@ -338,7 +356,7 @@ def eval_arc(sim, grid, n_steps=20):
 
 # ─── DEMO ─────────────────────────────────────────────────────────────────
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     random.seed(42)
     sim = CRFSimulator(n_init=200, max_cells=1000, state_dim=64, k_neighbors=4)
     sim.seed([0.5, -0.3, 0.8, 0.1, -0.7], n_cells=200)
@@ -347,12 +365,14 @@ if __name__ == '__main__':
         changes = sim.step()
         if step % 10 == 0:
             vote, conf = sim.consensus.aggregate(sim.cells)
-            print(f'step {step:3d} | cells {len(sim.cells):4d} | vote {vote:4d} conf {conf:.3f}')
+            print(
+                f"step {step:3d} | cells {len(sim.cells):4d} | vote {vote:4d} conf {conf:.3f}"
+            )
 
     vote, conf, n = sim.consensus.aggregate(sim.cells), 0, len(sim.cells)
-    print(f'\nfinal | cells {n} | consensus vote {vote[0]} (conf {vote[1]:.3f})')
+    print(f"\nfinal | cells {n} | consensus vote {vote[0]} (conf {vote[1]:.3f})")
 
     # ARC-like test
     grid = [[1, 2], [3, 4]]
     out = eval_arc(sim, grid)
-    print(f'ARC test | vote {out[0]} conf {out[1]:.3f} cells {out[2]}')
+    print(f"ARC test | vote {out[0]} conf {out[1]:.3f} cells {out[2]}")
