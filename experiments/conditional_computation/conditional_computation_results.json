@@ -1,0 +1,40 @@
+[
+  {
+    "model_name": "Conditional CRF (10%)",
+    "n_params": 68968,
+    "forward_time": 0.15839745998382568,
+    "compute_efficiency": 10.0,
+    "training_time": 39.82694149017334,
+    "final_val_accuracy": 0.1753125,
+    "history": {
+      "compute_efficiency": [
+        10.0,
+        10.0,
+        10.0
+      ]
+    }
+  },
+  {
+    "model_name": "Conditional CRF (5%)",
+    "n_params": 68968,
+    "forward_time": 0.12271173000335693,
+    "compute_efficiency": 20.0,
+    "training_time": 38.694052934646606,
+    "final_val_accuracy": 0.15625,
+    "history": {
+      "compute_efficiency": [
+        20.0,
+        20.0,
+        20.0
+      ]
+    }
+  },
+  {
+    "model_name": "Transformer",
+    "n_params": 144384,
+    "forward_time": 0.15439722537994385,
+    "compute_efficiency": 1.0,
+    "training_time": 87.68006920814514,
+    "final_val_accuracy": 0.149375
+  }
+]

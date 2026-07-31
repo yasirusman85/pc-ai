@@ -322,7 +322,7 @@ class RealDatasetFactory:
         return ["tinystories", "humaneval", "gsm8k", "arc"]
 
     @staticmethod
-    def check_dataset_availability(name: str) -> Dict[str, bool]:
+    def check_dataset_availability(name: Optional[str] = None) -> Dict[str, bool]:
         """
         Check which datasets are available (can be downloaded).
 

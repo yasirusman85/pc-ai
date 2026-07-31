@@ -10,10 +10,12 @@ Provides:
 """
 
 import os
+import sys
 import math
 import random
 import struct
 import hashlib
+from pathlib import Path
 from typing import List, Tuple, Optional
 
 import torch
@@ -491,6 +493,7 @@ def make_dataloader(
     shuffle: bool = True,
     num_workers: int = 0,
     seed: Optional[int] = None,
+    drop_last: bool = False,
 ) -> DataLoader:
     generator = None
     if seed is not None:
@@ -500,8 +503,9 @@ def make_dataloader(
         batch_size=batch_size,
         shuffle=shuffle,
         num_workers=num_workers,
-        generator=generator,
         pin_memory=False,
+        generator=generator,
+        drop_last=drop_last,
     )
 
 
@@ -516,7 +520,7 @@ def get_datasets(
     """
     Returns (train_dataset, val_dataset).
     name: 'synthetic' | 'tinystories' | 'arithmetic' | 'arc' |
-          'chain_of_thought' | 'code' | 'humaneval' | 'gsm8k'
+          'chain_of_thought' | 'code' | 'humaneval' | 'gsm8k' | 'shakespeare'
     use_real: If True, uses real datasets when available (requires downloads)
     """
     tok = tokenizer or CharTokenizer()
@@ -567,11 +571,32 @@ def get_datasets(
     elif name == "gsm8k":
         # Fallback to arithmetic with chain-of-thought
         train_ds = ChainOfThoughtDataset(max_train, seq_len, seed=0, tokenizer=tok)
+        val_ds = ChainOfThoughtDataset(max_val, seq_len, seed=99, tokenizer=tok)
+    elif name == "shakespeare":
+        # Real language modeling data (Tiny Shakespeare, 1.1M chars)
+        try:
+            from shakespeare_dataset import get_shakespeare_datasets
+        except ImportError:
+            sys.path.insert(
+                0,
+                str(
+                    Path(__file__).parent.parent.parent
+                    / "experiments"
+                    / "real_experiments"
+                ),
+            )
+            from shakespeare_dataset import get_shakespeare_datasets
+        train_ds, val_ds = get_shakespeare_datasets(
+            seq_len=seq_len, train_ratio=0.9, tokenizer=tok
+        )
     elif name == "synthetic":
         train_ds = SyntheticDataset(max_train, seq_len, seed=0, tokenizer=tok)
         val_ds = SyntheticDataset(max_val, seq_len, seed=99, tokenizer=tok)
     else:
-        raise ValueError(f"Unknown dataset name: '{name}'")
+        raise ValueError(
+            f"Unknown dataset name {name!r}. Valid: synthetic, tinystories, "
+            f"arithmetic, arc, chain_of_thought, code, humaneval, gsm8k, shakespeare"
+        )
 
     return train_ds, val_ds
 

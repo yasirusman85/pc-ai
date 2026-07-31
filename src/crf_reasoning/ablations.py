@@ -19,6 +19,7 @@ from typing import Dict, Optional
 
 from .crf_vectorized import AblationConfig, CRFLanguageModel
 
+
 # ─── Named ablation registry ─────────────────────────────────────────────────
 
 ABLATION_CONFIGS: Dict[str, AblationConfig] = {

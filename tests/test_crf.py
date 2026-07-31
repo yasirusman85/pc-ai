@@ -274,13 +274,11 @@ class TestCRFLanguageModel:
     def test_forward_shape(self, model):
         """Test forward pass produces correct shapes."""
         x = torch.randint(0, 99, (2, 10))
-
-        logits, loss, metrics = model(x, targets=x)
+        logits, loss, metrics = model(x, targets=x, collect_metrics=True)
 
         assert logits.shape == (2, 10, 99)
         assert loss is not None
-        assert isinstance(metrics, (list, CRFMetrics))
-
+        assert isinstance(metrics, CRFMetrics)
     def test_forward_without_targets(self, model):
         """Test forward pass without targets."""
         x = torch.randint(0, 99, (2, 10))

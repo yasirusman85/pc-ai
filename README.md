@@ -14,11 +14,15 @@ CRF (Cellular Reasoning Fabric) is a biologically-inspired approach to sequence 
 
 ## Key Innovation
 
-CRF is the first architecture to combine:
+To our knowledge, CRF is the first architecture to combine all of the following:
 - Differentiable end-to-end training on token sequences
 - Dynamic population lifecycles (cells created/destroyed during forward pass)
 - Per-cell heterogeneous programs (functional specialization emerges)
 - Energy-regulated adaptive computation (hard inputs get more resources)
+
+Each individual component has prior art (adaptive computation time, neural
+cellular automata, mixture-of-experts, message passing). The claimed novelty
+is the specific combination, and the claim is empirical, not proven.
 
 ## System Architecture
 
@@ -143,6 +147,43 @@ history = train(
 )
 ```
 
+### Efficiency-Optimized Training
+
+Working hypothesis: "CRF can reach Transformer-level accuracy with fewer
+training tokens, by replacing weight memorization with dynamic computation."
+
+**Current measured results** (see `results/doc/README.md`): across 24+ settings
+(d=32/64, 3 datasets incl. real GSM8K, 2 seeds), CRF consistently exceeds this
+bar. Average token efficiency ~5.9× (not yet 10–100× — that is the stretch
+target, not the measured number). Average accuracy-per-FLOP ~10×, accuracy-per-
+parameter ~4×. Results are CPU-scale and must not be extrapolated to GPU-scale
+LLM training without new evidence.
+
+```python
+from experiments.efficiency_benchmark import EfficiencyBenchmark
+
+# Run comparative efficiency benchmark
+benchmark = EfficiencyBenchmark()
+results = benchmark.run_comparative_benchmark(config={
+    'vocab_size': 99,
+    'd_model': 128,
+    'n_init_cells': 32,
+    'max_cells': 128,
+    'n_crf_steps': 6,
+    'k_neighbors': 4,
+    'seq_len': 64,
+    'dataset': 'arithmetic',
+    'max_train': 2000,
+    'max_val': 500,
+    'batch_size': 32,
+    'n_epochs': 15,
+    'lr': 3e-4,
+})
+
+# Results include efficiency ratios and hypothesis validation
+print(results['comparative_analysis'])
+```
+
 ### Running Benchmarks
 
 ```bash
@@ -156,6 +197,12 @@ python -m scripts.benchmark --exp all
 python -m scripts.benchmark --exp ablations
 python -m scripts.benchmark --exp scaling
 python -m scripts.benchmark --exp theory
+
+# Efficiency hypothesis testing
+python experiments/efficiency_benchmark.py --fast                    # Quick test
+python experiments/efficiency_benchmark.py                           # Full benchmark
+python experiments/efficiency_benchmark.py --crf-only               # CRF only
+python experiments/efficiency_benchmark.py --transformer-only        # Transformer only
 ```
 
 ### Generating Results
@@ -231,6 +278,31 @@ The architecture is formally characterized with three theorems:
 3. **Convergence under Contraction**: Convergence guarantees under certain conditions
 
 See `CRF_TECHNICAL.md` for complete formalization.
+
+## Limitations (read before citing)
+
+- **Scale**: all experiments are small (d ≤ 128, ≤ 100k tokens, CPU). No
+  evidence yet at LLM scale. The sample-efficiency advantage may not survive
+  scaling; this is untested, not predicted.
+- **Speed**: CRF per-token cost is currently slower than an equal-size
+  Transformer on CPU. Wall-clock advantage comes only from needing fewer
+  tokens. GPU parity is unimplemented.
+- **FLOP estimates**: `estimate_crf_flops` is an analytical upper-bound, not a
+  profiler measurement. Accuracy-per-FLOP ratios are approximate.
+- **Lifecycle decisions are thresholded, not learned**: cell energy is produced
+  by a learned gate, but the split/death/merge *decisions* apply fixed
+  thresholds (ε_split = 1.05, death < 0.01, merge sim > 0.95). The energy
+  signal itself is differentiable; making the discrete lifecycle choices
+  learned end-to-end (e.g. straight-through estimators) is open work and may
+  be required to avoid plateauing at larger scale.
+- **Baseline matching**: parameter-matched Transformers are found by grid
+  search and can be up to 1.6× larger than the CRF they are matched to.
+  Normalized metrics (acc/param, acc/FLOP) mitigate but do not fully remove
+  this bias.
+- **Data**: GSM8K/Shakespeare/TinyStories are real; synthetic and arithmetic
+  are proxy tasks. None of these are frontier reasoning benchmarks.
+- **Theorems** in `docs/sec3_theory.md` are elementary bounds and convergence
+  sketches, not deep results. They do not prove practical superiority.
 
 ## Experiment Tracking
 
