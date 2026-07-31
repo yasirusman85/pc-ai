@@ -113,12 +113,20 @@ class ExperimentResult:
     tr_time_s: float
     crf_flops: int
     tr_flops: int
+    # Normalized metrics (accuracy per unit of resource)
+    crf_acc_per_param: float
+    tr_acc_per_param: float
+    crf_acc_per_flop: float
+    tr_acc_per_flop: float
     # Efficiency ratios (how many x more TR needs)
     token_efficiency: float       # TR_tokens / CRF_tokens to reach TR_final*0.9
     flops_efficiency: float
     time_efficiency: float
     # Hypothesis: CRF reaches >=90% TR final acc with <=50% tokens
     hypothesis_supported: bool
+    # Learning curves (tokens, acc) for plotting
+    crf_curve: list = field(default_factory=list)
+    tr_curve: list = field(default_factory=list)
 
 
 # ─── Training with budget tracking ───────────────────────────────────────
@@ -241,8 +249,12 @@ def run_experiment(
     presets = SIZE_PRESETS.get(d_model, SIZE_PRESETS[64])
     torch.manual_seed(seed)
     tok = CharTokenizer()
+    # GSM8K / real reasoning needs longer context
+    if dataset in ('gsm8k', 'humaneval', 'chain_of_thought', 'code'):
+        seq_len = max(seq_len, 64)
+    use_real = dataset in ('gsm8k', 'humaneval', 'arc') and not dataset == 'arc'
     tr_ds, va_ds = get_datasets(dataset, seq_len=seq_len, max_train=max_train,
-                                 max_val=max_val, tokenizer=tok)
+                                 max_val=max_val, tokenizer=tok, use_real=use_real)
     tr_dl = make_dataloader(tr_ds, batch_size=batch_size)
     va_dl = make_dataloader(va_ds, batch_size=batch_size, shuffle=False)
     mcfg = ModelConfig(vocab_size=tok.vocab_size, d_model=presets['d_model'],
@@ -277,6 +289,14 @@ def run_experiment(
         flops_efficiency=s.get('flops_efficiency_ratio') or 0.0,
         time_efficiency=s.get('time_efficiency_ratio') or 0.0,
         hypothesis_supported=s.get('hypothesis_supported', False),
+        crf_acc_per_param=crf_run.snapshots[-1].val_acc / max(1e-8, crf_run.n_params),
+        tr_acc_per_param=tr_run.snapshots[-1].val_acc / max(1e-8, tr_run.n_params),
+        crf_acc_per_flop=crf_run.snapshots[-1].val_acc / max(1e-8, crf_run.total_flops),
+        tr_acc_per_flop=tr_run.snapshots[-1].val_acc / max(1e-8, tr_run.total_flops),
+        crf_curve=[{'tokens': s.tokens_seen, 'acc': s.val_acc,
+                    'flops': s.flops, 'time': s.wall_time_s} for s in crf_run.snapshots],
+        tr_curve=[{'tokens': s.tokens_seen, 'acc': s.val_acc,
+                   'flops': s.flops, 'time': s.wall_time_s} for s in tr_run.snapshots],
     )
 
 
@@ -346,7 +366,15 @@ def load_results() -> List[ExperimentResult]:
     if RESULTS_PATH.exists():
         with open(RESULTS_PATH) as f:
             data = json.load(f)
-        return [ExperimentResult(**item) for item in data]
+        out = []
+        for item in data:
+            for k in ('crf_acc_per_param', 'tr_acc_per_param',
+                      'crf_acc_per_flop', 'tr_acc_per_flop'):
+                item.setdefault(k, 0.0)
+            item.setdefault('crf_curve', [])
+            item.setdefault('tr_curve', [])
+            out.append(ExperimentResult(**item))
+        return out
     return []
 
 
@@ -399,26 +427,32 @@ def print_summary(results: List[ExperimentResult]):
     if not results:
         print("No results.")
         return
-    print('\n' + '='*120)
+    print('\n' + '='*130)
     print('HYPOTHESIS SWEEP - AGGREGATE RESULTS')
-    print('='*120)
-    header = f"{'d':>4} {'seed':>4} {'dataset':<14} {'budget':>8} {'TR_acc':>8} {'CRF_acc':>8} {'CRF/TR':>7} {'tok_eff':>7} {'FLOP_eff':>8} {'time_eff':>8} {'hyp?':>5}"
+    print('='*130)
+    header = (f"{'d':>4} {'seed':>4} {'dataset':<14} {'budget':>8} {'TR_acc':>8} {'CRF_acc':>8} "
+              f"{'CRF/TR':>7} {'tok_eff':>7} {'acc/FLOP':>9} {'acc/param':>9} {'hyp?':>5}")
     print(header)
-    print('-'*120)
+    print('-'*130)
     for r in sorted(results, key=lambda x: (x.dataset, x.d_model, x.seed, x.budget)):
         ratio = r.crf_best_acc / max(1e-8, r.tr_best_acc)
         tok = f"{r.token_efficiency:.1f}x" if r.token_efficiency > 0 else "N/A"
-        flop = f"{r.flops_efficiency:.1f}x" if r.flops_efficiency > 0 else "N/A"
-        tim = f"{r.time_efficiency:.1f}x" if r.time_efficiency > 0 else "N/A"
         hyp = 'Y' if r.hypothesis_supported else 'N'
+        # acc/FLOP and acc/param ratios (CRF / TR)
+        af = (r.crf_acc_per_flop / max(1e-12, r.tr_acc_per_flop)) if r.tr_acc_per_flop > 0 else 0
+        ap = (r.crf_acc_per_param / max(1e-12, r.tr_acc_per_param)) if r.tr_acc_per_param > 0 else 0
         print(f"{r.d_model:>4} {r.seed:>4} {r.dataset:<14} {r.budget:>8,} "
               f"{r.tr_best_acc:>8.4f} {r.crf_best_acc:>8.4f} {ratio:>6.2f}x "
-              f"{tok:>7} {flop:>8} {tim:>8} {hyp:>5}")
-    print('-'*120)
+              f"{tok:>7} {af:>8.1f}x {ap:>8.1f}x {hyp:>5}")
+    print('-'*130)
     n_hyp = sum(1 for r in results if r.hypothesis_supported)
     tok_effs = [r.token_efficiency for r in results if r.token_efficiency > 0]
     flop_effs = [r.flops_efficiency for r in results if r.flops_efficiency > 0]
     time_effs = [r.time_efficiency for r in results if r.time_efficiency > 0]
+    afs = [r.crf_acc_per_flop/max(1e-12, r.tr_acc_per_flop)
+           for r in results if r.tr_acc_per_flop > 0]
+    aps = [r.crf_acc_per_param/max(1e-12, r.tr_acc_per_param)
+           for r in results if r.tr_acc_per_param > 0]
     avg_tok = sum(tok_effs)/max(1, len(tok_effs))
     avg_flop = sum(flop_effs)/max(1, len(flop_effs))
     avg_time = sum(time_effs)/max(1, len(time_effs))
@@ -429,13 +463,19 @@ def print_summary(results: List[ExperimentResult]):
         print(f"Avg FLOP efficiency:   {avg_flop:.2f}x")
     if time_effs:
         print(f"Avg time efficiency:   {avg_time:.2f}x")
-    print('='*120)
+    if afs:
+        print(f"Avg acc/FLOP ratio:    {sum(afs)/len(afs):.2f}x (CRF accuracy per FLOP vs TR)")
+    if aps:
+        print(f"Avg acc/param ratio:   {sum(aps)/len(aps):.2f}x (CRF accuracy per param vs TR)")
+    print('='*130)
     return {
         'n_hyp_supported': n_hyp,
         'total': len(results),
         'avg_token_efficiency': round(avg_tok, 2) if tok_effs else None,
         'avg_flops_efficiency': round(avg_flop, 2) if flop_effs else None,
         'avg_time_efficiency': round(avg_time, 2) if time_effs else None,
+        'avg_acc_per_flop_ratio': round(sum(afs)/len(afs), 2) if afs else None,
+        'avg_acc_per_param_ratio': round(sum(aps)/len(aps), 2) if aps else None,
         'results': [asdict(r) for r in results],
     }
 
@@ -500,6 +540,51 @@ def _eval_acc(model, loader, mtype):
     return correct / max(1, total)
 
 
+# ─── Efficiency curves ───────────────────────────────────────────────────
+
+def plot_efficiency_curves(results: List[ExperimentResult], path: Optional[Path] = None):
+    """4-panel figure: acc vs tokens, acc vs FLOPs, acc vs wall-time, acc-per-FLOP."""
+    path = path or (RESULTS_DIR / 'fig_efficiency_curves.png')
+    try:
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+    except ImportError:
+        print('[plot] matplotlib not available')
+        return
+    if not results:
+        return
+    # One representative run per (d, dataset): use largest budget, seed 0
+    rep = {}
+    for r in sorted(results, key=lambda x: x.budget):
+        key = (r.d_model, r.dataset)
+        rep[key] = r
+    rows = sorted(rep.items(), key=lambda kv: (kv[1].dataset, kv[1].d_model))
+    n = len(rows)
+    cols = 4
+    rows_n = math.ceil(n / cols)
+    fig, axes = plt.subplots(rows_n, cols, figsize=(5*cols, 4*rows_n), squeeze=False)
+    colors = {'crf': '#1f77b4', 'tr': '#d62728'}
+    for i, ((d, ds), r) in enumerate(rows):
+        ax_tok = axes[i//cols][i%cols]
+        ax_tok.plot([p['tokens'] for p in r.crf_curve], [p['acc'] for p in r.crf_curve],
+                    '-o', color=colors['crf'], label='CRF', ms=3)
+        ax_tok.plot([p['tokens'] for p in r.tr_curve], [p['acc'] for p in r.tr_curve],
+                    '-o', color=colors['tr'], label='Transformer', ms=3)
+        ax_tok.set_title(f'{ds} d={d} (CRF {r.crf_params:,}p / TR {r.tr_params:,}p)')
+        ax_tok.set_xlabel('tokens seen')
+        ax_tok.set_ylabel('val accuracy')
+        ax_tok.legend(fontsize=8)
+        ax_tok.grid(alpha=0.3)
+    # Hide unused axes
+    for i in range(n, rows_n*cols):
+        axes[i//cols][i%cols].axis('off')
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+    print(f'\n[plot] saved {path}')
+
+
 # ─── CLI ─────────────────────────────────────────────────────────────────
 
 def parse_args():
@@ -555,3 +640,5 @@ if __name__ == '__main__':
     with open(RESULTS_DIR / 'hypothesis_sweep_summary.json', 'w') as f:
         json.dump(summary, f, indent=2, default=str)
     print(f'\nFull summary saved to {RESULTS_DIR / "hypothesis_sweep_summary.json"}')
+    if args.plot:
+        plot_efficiency_curves(results)

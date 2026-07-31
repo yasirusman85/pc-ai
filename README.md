@@ -81,6 +81,35 @@ history = train(
 )
 ```
 
+### Efficiency-Optimized Training
+
+Test the hypothesis: "CRF achieves Transformer-level reasoning with 10-100× fewer training tokens"
+
+```python
+from efficiency_benchmark import EfficiencyBenchmark
+
+# Run comparative efficiency benchmark
+benchmark = EfficiencyBenchmark()
+results = benchmark.run_comparative_benchmark(config={
+    'vocab_size': 99,
+    'd_model': 128,
+    'n_init_cells': 32,
+    'max_cells': 128,
+    'n_crf_steps': 6,
+    'k_neighbors': 4,
+    'seq_len': 64,
+    'dataset': 'arithmetic',
+    'max_train': 2000,
+    'max_val': 500,
+    'batch_size': 32,
+    'n_epochs': 15,
+    'lr': 3e-4,
+})
+
+# Results include efficiency ratios and hypothesis validation
+print(results['comparative_analysis'])
+```
+
 ### Running Benchmarks
 
 ```bash
@@ -94,6 +123,12 @@ python benchmark.py --exp all
 python benchmark.py --exp ablations
 python benchmark.py --exp scaling
 python benchmark.py --exp theory
+
+# Efficiency hypothesis testing
+python efficiency_benchmark.py --fast                    # Quick test
+python efficiency_benchmark.py                           # Full benchmark
+python efficiency_benchmark.py --crf-only               # CRF only
+python efficiency_benchmark.py --transformer-only        # Transformer only
 ```
 
 ### Generating Results

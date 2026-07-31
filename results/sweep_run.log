@@ -1,0 +1,623 @@
+
+Sweep: 2 sizes x 2 budgets x 2 seeds x 3 datasets = 24 experiments
+Already completed: 4
+
+--- Experiment 1/20: d=32 budget=25,000 seed=1 dataset=synthetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=1, dataset=synthetic, budget=25,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-syn-s1] tok=   2,560 val_loss=4.4076 val_acc=0.2177 t=1.1s
+  [CRF-d32-syn-s1] tok=   5,120 val_loss=4.2802 val_acc=0.2190 t=2.2s
+  [CRF-d32-syn-s1] tok=   7,680 val_loss=4.1647 val_acc=0.2660 t=3.6s
+  [CRF-d32-syn-s1] tok=  10,240 val_loss=4.0589 val_acc=0.3094 t=4.8s
+  [CRF-d32-syn-s1] tok=  12,544 val_loss=3.9852 val_acc=0.3175 t=6.1s
+  [CRF-d32-syn-s1] tok=  15,104 val_loss=3.9223 val_acc=0.3240 t=7.2s
+  [CRF-d32-syn-s1] tok=  17,664 val_loss=3.8779 val_acc=0.3267 t=7.9s
+  [CRF-d32-syn-s1] tok=  20,224 val_loss=3.8497 val_acc=0.3293 t=8.6s
+  [CRF-d32-syn-s1] tok=  22,528 val_loss=3.8344 val_acc=0.3298 t=9.4s
+  [CRF-d32-syn-s1] tok=  25,088 val_loss=3.8229 val_acc=0.3293 t=10.5s
+  [CRF-d32-syn-s1] FINAL tok=  25,088 val_loss=3.8229 val_acc=0.3293 t=11.5s
+  [TR-d32-syn-s1] tok=   2,560 val_loss=4.5548 val_acc=0.0159 t=0.3s
+  [TR-d32-syn-s1] tok=   5,120 val_loss=4.4611 val_acc=0.0283 t=0.7s
+  [TR-d32-syn-s1] tok=   7,680 val_loss=4.3680 val_acc=0.0316 t=1.0s
+  [TR-d32-syn-s1] tok=  10,240 val_loss=4.2803 val_acc=0.0472 t=1.4s
+  [TR-d32-syn-s1] tok=  12,544 val_loss=4.2106 val_acc=0.0835 t=1.6s
+  [TR-d32-syn-s1] tok=  15,104 val_loss=4.1477 val_acc=0.1383 t=1.9s
+  [TR-d32-syn-s1] tok=  17,664 val_loss=4.1018 val_acc=0.1704 t=2.3s
+  [TR-d32-syn-s1] tok=  20,224 val_loss=4.0719 val_acc=0.1962 t=2.6s
+  [TR-d32-syn-s1] tok=  22,528 val_loss=4.0552 val_acc=0.2065 t=3.0s
+  [TR-d32-syn-s1] tok=  25,088 val_loss=4.0428 val_acc=0.2121 t=3.3s
+  [TR-d32-syn-s1] FINAL tok=  25,088 val_loss=4.0428 val_acc=0.2121 t=3.5s
+  [saved] d=32 budget=25,000 seed=1 dataset=synthetic
+
+--- Experiment 2/19: d=32 budget=50,000 seed=1 dataset=synthetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=1, dataset=synthetic, budget=50,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-syn-s1] tok=   5,120 val_loss=4.3336 val_acc=0.2190 t=0.9s
+  [CRF-d32-syn-s1] tok=  10,240 val_loss=4.0874 val_acc=0.2863 t=1.8s
+  [CRF-d32-syn-s1] tok=  15,104 val_loss=3.8840 val_acc=0.3258 t=2.7s
+  [CRF-d32-syn-s1] tok=  20,224 val_loss=3.7144 val_acc=0.3521 t=3.5s
+  [CRF-d32-syn-s1] tok=  25,088 val_loss=3.5939 val_acc=0.3695 t=4.3s
+  [CRF-d32-syn-s1] tok=  30,208 val_loss=3.4997 val_acc=0.3806 t=5.3s
+  [CRF-d32-syn-s1] tok=  35,072 val_loss=3.4396 val_acc=0.3855 t=7.0s
+  [CRF-d32-syn-s1] tok=  40,192 val_loss=3.3985 val_acc=0.3873 t=8.5s
+  [CRF-d32-syn-s1] tok=  45,056 val_loss=3.3740 val_acc=0.3859 t=9.8s
+  [CRF-d32-syn-s1] tok=  50,176 val_loss=3.3571 val_acc=0.3928 t=11.6s
+  [CRF-d32-syn-s1] FINAL tok=  50,176 val_loss=3.3571 val_acc=0.3928 t=12.2s
+  [TR-d32-syn-s1] tok=   5,120 val_loss=4.5082 val_acc=0.0230 t=0.5s
+  [TR-d32-syn-s1] tok=  10,240 val_loss=4.3102 val_acc=0.0532 t=1.1s
+  [TR-d32-syn-s1] tok=  15,104 val_loss=4.1145 val_acc=0.2067 t=1.6s
+  [TR-d32-syn-s1] tok=  20,224 val_loss=3.9275 val_acc=0.2190 t=2.3s
+  [TR-d32-syn-s1] tok=  25,088 val_loss=3.7923 val_acc=0.2190 t=2.9s
+  [TR-d32-syn-s1] tok=  30,208 val_loss=3.6945 val_acc=0.2190 t=3.5s
+  [TR-d32-syn-s1] tok=  35,072 val_loss=3.6325 val_acc=0.2190 t=4.2s
+  [TR-d32-syn-s1] tok=  40,192 val_loss=3.5916 val_acc=0.2190 t=4.8s
+  [TR-d32-syn-s1] tok=  45,056 val_loss=3.5685 val_acc=0.2190 t=5.5s
+  [TR-d32-syn-s1] tok=  50,176 val_loss=3.5527 val_acc=0.2190 t=5.9s
+  [TR-d32-syn-s1] FINAL tok=  50,176 val_loss=3.5527 val_acc=0.2190 t=6.2s
+  [saved] d=32 budget=50,000 seed=1 dataset=synthetic
+
+--- Experiment 3/18: d=64 budget=25,000 seed=1 dataset=synthetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=1, dataset=synthetic, budget=25,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-syn-s1] tok=   2,560 val_loss=4.2367 val_acc=0.2202 t=2.2s
+  [CRF-d64-syn-s1] tok=   5,120 val_loss=3.9681 val_acc=0.2190 t=3.5s
+  [CRF-d64-syn-s1] tok=   7,680 val_loss=3.7448 val_acc=0.2268 t=4.9s
+  [CRF-d64-syn-s1] tok=  10,240 val_loss=3.5578 val_acc=0.3602 t=6.3s
+  [CRF-d64-syn-s1] tok=  12,544 val_loss=3.4332 val_acc=0.3802 t=7.3s
+  [CRF-d64-syn-s1] tok=  15,104 val_loss=3.3358 val_acc=0.3834 t=9.3s
+  [CRF-d64-syn-s1] tok=  17,664 val_loss=3.2710 val_acc=0.3869 t=10.9s
+  [CRF-d64-syn-s1] tok=  20,224 val_loss=3.2303 val_acc=0.3880 t=12.4s
+  [CRF-d64-syn-s1] tok=  22,528 val_loss=3.2082 val_acc=0.3878 t=13.6s
+  [CRF-d64-syn-s1] tok=  25,088 val_loss=3.1916 val_acc=0.3879 t=14.4s
+  [CRF-d64-syn-s1] FINAL tok=  25,088 val_loss=3.1916 val_acc=0.3879 t=15.3s
+  [TR-d64-syn-s1] tok=   2,560 val_loss=4.5814 val_acc=0.0178 t=0.7s
+  [TR-d64-syn-s1] tok=   5,120 val_loss=4.4832 val_acc=0.0325 t=1.6s
+  [TR-d64-syn-s1] tok=   7,680 val_loss=4.3835 val_acc=0.0471 t=2.3s
+  [TR-d64-syn-s1] tok=  10,240 val_loss=4.2884 val_acc=0.0557 t=3.1s
+  [TR-d64-syn-s1] tok=  12,544 val_loss=4.2140 val_acc=0.0604 t=3.8s
+  [TR-d64-syn-s1] tok=  15,104 val_loss=4.1485 val_acc=0.0605 t=4.5s
+  [TR-d64-syn-s1] tok=  17,664 val_loss=4.1021 val_acc=0.0588 t=5.2s
+  [TR-d64-syn-s1] tok=  20,224 val_loss=4.0723 val_acc=0.0602 t=5.9s
+  [TR-d64-syn-s1] tok=  22,528 val_loss=4.0557 val_acc=0.0602 t=6.6s
+  [TR-d64-syn-s1] tok=  25,088 val_loss=4.0432 val_acc=0.0619 t=7.1s
+  [TR-d64-syn-s1] FINAL tok=  25,088 val_loss=4.0432 val_acc=0.0619 t=7.6s
+  [saved] d=64 budget=25,000 seed=1 dataset=synthetic
+
+--- Experiment 4/17: d=64 budget=50,000 seed=1 dataset=synthetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=1, dataset=synthetic, budget=50,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-syn-s1] tok=   5,120 val_loss=4.0733 val_acc=0.2190 t=2.1s
+  [CRF-d64-syn-s1] tok=  10,240 val_loss=3.6032 val_acc=0.3249 t=3.9s
+  [CRF-d64-syn-s1] tok=  15,104 val_loss=3.2768 val_acc=0.3850 t=5.2s
+  [CRF-d64-syn-s1] tok=  20,224 val_loss=3.0434 val_acc=0.3928 t=6.6s
+  [CRF-d64-syn-s1] tok=  25,088 val_loss=2.8875 val_acc=0.4017 t=9.0s
+  [CRF-d64-syn-s1] tok=  30,208 val_loss=2.7722 val_acc=0.4036 t=11.4s
+  [CRF-d64-syn-s1] tok=  35,072 val_loss=2.6966 val_acc=0.4052 t=13.1s
+  [CRF-d64-syn-s1] tok=  40,192 val_loss=2.6472 val_acc=0.4034 t=14.8s
+  [CRF-d64-syn-s1] tok=  45,056 val_loss=2.6187 val_acc=0.4094 t=16.8s
+  [CRF-d64-syn-s1] tok=  50,176 val_loss=2.5988 val_acc=0.4100 t=18.7s
+  [CRF-d64-syn-s1] FINAL tok=  50,176 val_loss=2.5988 val_acc=0.4100 t=19.5s
+  [TR-d64-syn-s1] tok=   5,120 val_loss=4.5330 val_acc=0.0282 t=0.8s
+  [TR-d64-syn-s1] tok=  10,240 val_loss=4.3199 val_acc=0.0531 t=1.4s
+  [TR-d64-syn-s1] tok=  15,104 val_loss=4.1117 val_acc=0.0574 t=2.2s
+  [TR-d64-syn-s1] tok=  20,224 val_loss=3.9291 val_acc=0.0758 t=3.2s
+  [TR-d64-syn-s1] tok=  25,088 val_loss=3.8004 val_acc=0.0985 t=4.3s
+  [TR-d64-syn-s1] tok=  30,208 val_loss=3.7062 val_acc=0.1179 t=5.3s
+  [TR-d64-syn-s1] tok=  35,072 val_loss=3.6460 val_acc=0.1461 t=6.3s
+  [TR-d64-syn-s1] tok=  40,192 val_loss=3.6064 val_acc=0.1548 t=7.2s
+  [TR-d64-syn-s1] tok=  45,056 val_loss=3.5840 val_acc=0.1709 t=8.1s
+  [TR-d64-syn-s1] tok=  50,176 val_loss=3.5685 val_acc=0.1716 t=9.1s
+  [TR-d64-syn-s1] FINAL tok=  50,176 val_loss=3.5685 val_acc=0.1716 t=9.8s
+  [saved] d=64 budget=50,000 seed=1 dataset=synthetic
+
+--- Experiment 5/16: d=32 budget=25,000 seed=0 dataset=arithmetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=0, dataset=arithmetic, budget=25,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-ari-s0] tok=   2,560 val_loss=4.4256 val_acc=0.2164 t=0.4s
+  [CRF-d32-ari-s0] tok=   5,120 val_loss=4.2764 val_acc=0.2728 t=0.7s
+  [CRF-d32-ari-s0] tok=   7,680 val_loss=4.1386 val_acc=0.5188 t=1.2s
+  [CRF-d32-ari-s0] tok=  10,240 val_loss=4.0243 val_acc=0.5786 t=1.6s
+  [CRF-d32-ari-s0] tok=  12,544 val_loss=3.9409 val_acc=0.6244 t=2.0s
+  [CRF-d32-ari-s0] tok=  15,104 val_loss=3.8699 val_acc=0.6686 t=2.4s
+  [CRF-d32-ari-s0] tok=  17,664 val_loss=3.8181 val_acc=0.7100 t=2.7s
+  [CRF-d32-ari-s0] tok=  20,224 val_loss=3.7854 val_acc=0.7153 t=3.0s
+  [CRF-d32-ari-s0] tok=  22,528 val_loss=3.7672 val_acc=0.7150 t=3.4s
+  [CRF-d32-ari-s0] tok=  25,088 val_loss=3.7538 val_acc=0.7150 t=3.7s
+  [CRF-d32-ari-s0] FINAL tok=  25,088 val_loss=3.7538 val_acc=0.7150 t=3.8s
+  [TR-d32-ari-s0] tok=   2,560 val_loss=4.5547 val_acc=0.0139 t=0.1s
+  [TR-d32-ari-s0] tok=   5,120 val_loss=4.4555 val_acc=0.0452 t=0.2s
+  [TR-d32-ari-s0] tok=   7,680 val_loss=4.3591 val_acc=0.0450 t=0.3s
+  [TR-d32-ari-s0] tok=  10,240 val_loss=4.2706 val_acc=0.0656 t=0.3s
+  [TR-d32-ari-s0] tok=  12,544 val_loss=4.2016 val_acc=0.0656 t=0.4s
+  [TR-d32-ari-s0] tok=  15,104 val_loss=4.1404 val_acc=0.1006 t=0.5s
+  [TR-d32-ari-s0] tok=  17,664 val_loss=4.0968 val_acc=0.1181 t=0.5s
+  [TR-d32-ari-s0] tok=  20,224 val_loss=4.0690 val_acc=0.1181 t=0.6s
+  [TR-d32-ari-s0] tok=  22,528 val_loss=4.0532 val_acc=0.1181 t=0.7s
+  [TR-d32-ari-s0] tok=  25,088 val_loss=4.0415 val_acc=0.1181 t=0.7s
+  [TR-d32-ari-s0] FINAL tok=  25,088 val_loss=4.0415 val_acc=0.1181 t=0.8s
+  [saved] d=32 budget=25,000 seed=0 dataset=arithmetic
+
+--- Experiment 6/15: d=32 budget=50,000 seed=0 dataset=arithmetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=0, dataset=arithmetic, budget=50,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-ari-s0] tok=   5,120 val_loss=4.3458 val_acc=0.2356 t=0.3s
+  [CRF-d32-ari-s0] tok=  10,240 val_loss=4.0564 val_acc=0.5636 t=0.8s
+  [CRF-d32-ari-s0] tok=  15,104 val_loss=3.8292 val_acc=0.6711 t=1.3s
+  [CRF-d32-ari-s0] tok=  20,224 val_loss=3.6319 val_acc=0.7369 t=1.9s
+  [CRF-d32-ari-s0] tok=  25,088 val_loss=3.4821 val_acc=0.7584 t=2.4s
+  [CRF-d32-ari-s0] tok=  30,208 val_loss=3.3621 val_acc=0.7644 t=2.9s
+  [CRF-d32-ari-s0] tok=  35,072 val_loss=3.2793 val_acc=0.7970 t=3.3s
+  [CRF-d32-ari-s0] tok=  40,192 val_loss=3.2236 val_acc=0.7783 t=3.8s
+  [CRF-d32-ari-s0] tok=  45,056 val_loss=3.1888 val_acc=0.7900 t=4.2s
+  [CRF-d32-ari-s0] tok=  50,176 val_loss=3.1647 val_acc=0.7900 t=4.7s
+  [CRF-d32-ari-s0] FINAL tok=  50,176 val_loss=3.1647 val_acc=0.7900 t=4.9s
+  [TR-d32-ari-s0] tok=   5,120 val_loss=4.5036 val_acc=0.0452 t=0.2s
+  [TR-d32-ari-s0] tok=  10,240 val_loss=4.2992 val_acc=0.0450 t=0.3s
+  [TR-d32-ari-s0] tok=  15,104 val_loss=4.1062 val_acc=0.1181 t=0.5s
+  [TR-d32-ari-s0] tok=  20,224 val_loss=3.9341 val_acc=0.1988 t=0.7s
+  [TR-d32-ari-s0] tok=  25,088 val_loss=3.8130 val_acc=0.2462 t=0.9s
+  [TR-d32-ari-s0] tok=  30,208 val_loss=3.7213 val_acc=0.2431 t=1.2s
+  [TR-d32-ari-s0] tok=  35,072 val_loss=3.6626 val_acc=0.2325 t=1.3s
+  [TR-d32-ari-s0] tok=  40,192 val_loss=3.6225 val_acc=0.2325 t=1.5s
+  [TR-d32-ari-s0] tok=  45,056 val_loss=3.5992 val_acc=0.2431 t=1.7s
+  [TR-d32-ari-s0] tok=  50,176 val_loss=3.5829 val_acc=0.2431 t=1.9s
+  [TR-d32-ari-s0] FINAL tok=  50,176 val_loss=3.5829 val_acc=0.2431 t=1.9s
+  [saved] d=32 budget=50,000 seed=0 dataset=arithmetic
+
+--- Experiment 7/14: d=64 budget=25,000 seed=0 dataset=arithmetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=0, dataset=arithmetic, budget=25,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-ari-s0] tok=   2,560 val_loss=4.2042 val_acc=0.2833 t=0.5s
+  [CRF-d64-ari-s0] tok=   5,120 val_loss=3.8535 val_acc=0.3948 t=0.8s
+  [CRF-d64-ari-s0] tok=   7,680 val_loss=3.5662 val_acc=0.6922 t=1.1s
+  [CRF-d64-ari-s0] tok=  10,240 val_loss=3.3411 val_acc=0.7305 t=1.4s
+  [CRF-d64-ari-s0] tok=  12,544 val_loss=3.1839 val_acc=0.7475 t=1.7s
+  [CRF-d64-ari-s0] tok=  15,104 val_loss=3.0550 val_acc=0.7506 t=2.0s
+  [CRF-d64-ari-s0] tok=  17,664 val_loss=2.9665 val_acc=0.7670 t=2.4s
+  [CRF-d64-ari-s0] tok=  20,224 val_loss=2.9100 val_acc=0.7703 t=2.6s
+  [CRF-d64-ari-s0] tok=  22,528 val_loss=2.8793 val_acc=0.7703 t=2.9s
+  [CRF-d64-ari-s0] tok=  25,088 val_loss=2.8562 val_acc=0.7703 t=3.4s
+  [CRF-d64-ari-s0] FINAL tok=  25,088 val_loss=2.8562 val_acc=0.7703 t=3.7s
+  [TR-d64-ari-s0] tok=   2,560 val_loss=4.5424 val_acc=0.0175 t=0.3s
+  [TR-d64-ari-s0] tok=   5,120 val_loss=4.4388 val_acc=0.0500 t=0.4s
+  [TR-d64-ari-s0] tok=   7,680 val_loss=4.3361 val_acc=0.1122 t=0.6s
+  [TR-d64-ari-s0] tok=  10,240 val_loss=4.2424 val_acc=0.1272 t=0.8s
+  [TR-d64-ari-s0] tok=  12,544 val_loss=4.1721 val_acc=0.1706 t=1.0s
+  [TR-d64-ari-s0] tok=  15,104 val_loss=4.1120 val_acc=0.2013 t=1.2s
+  [TR-d64-ari-s0] tok=  17,664 val_loss=4.0703 val_acc=0.2325 t=1.4s
+  [TR-d64-ari-s0] tok=  20,224 val_loss=4.0437 val_acc=0.2325 t=1.6s
+  [TR-d64-ari-s0] tok=  22,528 val_loss=4.0289 val_acc=0.2325 t=1.8s
+  [TR-d64-ari-s0] tok=  25,088 val_loss=4.0178 val_acc=0.2325 t=2.0s
+  [TR-d64-ari-s0] FINAL tok=  25,088 val_loss=4.0178 val_acc=0.2325 t=2.1s
+  [saved] d=64 budget=25,000 seed=0 dataset=arithmetic
+
+--- Experiment 8/13: d=64 budget=50,000 seed=0 dataset=arithmetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=0, dataset=arithmetic, budget=50,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-ari-s0] tok=   5,120 val_loss=4.0096 val_acc=0.2975 t=0.6s
+  [CRF-d64-ari-s0] tok=  10,240 val_loss=3.4088 val_acc=0.7147 t=1.0s
+  [CRF-d64-ari-s0] tok=  15,104 val_loss=2.9885 val_acc=0.7506 t=1.7s
+  [CRF-d64-ari-s0] tok=  20,224 val_loss=2.6515 val_acc=0.7773 t=2.3s
+  [CRF-d64-ari-s0] tok=  25,088 val_loss=2.4096 val_acc=0.7847 t=2.7s
+  [CRF-d64-ari-s0] tok=  30,208 val_loss=2.2150 val_acc=0.8223 t=3.4s
+  [CRF-d64-ari-s0] tok=  35,072 val_loss=2.0855 val_acc=0.8347 t=3.9s
+  [CRF-d64-ari-s0] tok=  40,192 val_loss=2.0002 val_acc=0.8573 t=4.4s
+  [CRF-d64-ari-s0] tok=  45,056 val_loss=1.9476 val_acc=0.8469 t=5.0s
+  [CRF-d64-ari-s0] tok=  50,176 val_loss=1.9118 val_acc=0.8453 t=5.5s
+  [CRF-d64-ari-s0] FINAL tok=  50,176 val_loss=1.9117 val_acc=0.8453 t=5.7s
+  [TR-d64-ari-s0] tok=   5,120 val_loss=4.4891 val_acc=0.0175 t=0.2s
+  [TR-d64-ari-s0] tok=  10,240 val_loss=4.2730 val_acc=0.1272 t=0.4s
+  [TR-d64-ari-s0] tok=  15,104 val_loss=4.0807 val_acc=0.2188 t=0.7s
+  [TR-d64-ari-s0] tok=  20,224 val_loss=3.9199 val_acc=0.2325 t=0.9s
+  [TR-d64-ari-s0] tok=  25,088 val_loss=3.8058 val_acc=0.2325 t=1.2s
+  [TR-d64-ari-s0] tok=  30,208 val_loss=3.7182 val_acc=0.2325 t=1.5s
+  [TR-d64-ari-s0] tok=  35,072 val_loss=3.6597 val_acc=0.2325 t=1.8s
+  [TR-d64-ari-s0] tok=  40,192 val_loss=3.6188 val_acc=0.2325 t=2.3s
+  [TR-d64-ari-s0] tok=  45,056 val_loss=3.5950 val_acc=0.2325 t=2.8s
+  [TR-d64-ari-s0] tok=  50,176 val_loss=3.5786 val_acc=0.2325 t=3.0s
+  [TR-d64-ari-s0] FINAL tok=  50,176 val_loss=3.5786 val_acc=0.2325 t=3.1s
+  [saved] d=64 budget=50,000 seed=0 dataset=arithmetic
+
+--- Experiment 9/12: d=32 budget=25,000 seed=1 dataset=arithmetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=1, dataset=arithmetic, budget=25,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-ari-s1] tok=   2,560 val_loss=4.3796 val_acc=0.2323 t=0.5s
+  [CRF-d32-ari-s1] tok=   5,120 val_loss=4.2350 val_acc=0.2325 t=1.0s
+  [CRF-d32-ari-s1] tok=   7,680 val_loss=4.0997 val_acc=0.4192 t=1.5s
+  [CRF-d32-ari-s1] tok=  10,240 val_loss=3.9842 val_acc=0.4788 t=1.9s
+  [CRF-d32-ari-s1] tok=  12,544 val_loss=3.8985 val_acc=0.5666 t=2.4s
+  [CRF-d32-ari-s1] tok=  15,104 val_loss=3.8230 val_acc=0.6102 t=2.8s
+  [CRF-d32-ari-s1] tok=  17,664 val_loss=3.7694 val_acc=0.6531 t=3.1s
+  [CRF-d32-ari-s1] tok=  20,224 val_loss=3.7351 val_acc=0.6727 t=3.4s
+  [CRF-d32-ari-s1] tok=  22,528 val_loss=3.7162 val_acc=0.6930 t=3.7s
+  [CRF-d32-ari-s1] tok=  25,088 val_loss=3.7022 val_acc=0.6930 t=4.0s
+  [CRF-d32-ari-s1] FINAL tok=  25,088 val_loss=3.7022 val_acc=0.6930 t=4.2s
+  [TR-d32-ari-s1] tok=   2,560 val_loss=4.5280 val_acc=0.0406 t=0.1s
+  [TR-d32-ari-s1] tok=   5,120 val_loss=4.4309 val_acc=0.0458 t=0.2s
+  [TR-d32-ari-s1] tok=   7,680 val_loss=4.3362 val_acc=0.0488 t=0.4s
+  [TR-d32-ari-s1] tok=  10,240 val_loss=4.2503 val_acc=0.0827 t=0.5s
+  [TR-d32-ari-s1] tok=  12,544 val_loss=4.1848 val_acc=0.1480 t=0.7s
+  [TR-d32-ari-s1] tok=  15,104 val_loss=4.1272 val_acc=0.1858 t=0.7s
+  [TR-d32-ari-s1] tok=  17,664 val_loss=4.0861 val_acc=0.1944 t=0.8s
+  [TR-d32-ari-s1] tok=  20,224 val_loss=4.0595 val_acc=0.2222 t=0.9s
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  [TR-d32-ari-s1] tok=  22,528 val_loss=4.0445 val_acc=0.2234 t=0.9s
+  [TR-d32-ari-s1] tok=  25,088 val_loss=4.0334 val_acc=0.2234 t=1.0s
+  [TR-d32-ari-s1] FINAL tok=  25,088 val_loss=4.0334 val_acc=0.2234 t=1.0s
+  [saved] d=32 budget=25,000 seed=1 dataset=arithmetic
+
+--- Experiment 10/11: d=32 budget=50,000 seed=1 dataset=arithmetic ---
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=12,338 ratio=1.600
+
+  [d=32, seed=1, dataset=arithmetic, budget=50,000] CRF params=12,338 TR params=19,744
+  [CRF-d32-ari-s1] tok=   5,120 val_loss=4.2962 val_acc=0.2325 t=0.3s
+  [CRF-d32-ari-s1] tok=  10,240 val_loss=4.0155 val_acc=0.4713 t=0.9s
+  [CRF-d32-ari-s1] tok=  15,104 val_loss=3.7806 val_acc=0.6091 t=1.4s
+  [CRF-d32-ari-s1] tok=  20,224 val_loss=3.5782 val_acc=0.7661 t=1.8s
+  [CRF-d32-ari-s1] tok=  25,088 val_loss=3.4282 val_acc=0.7683 t=2.4s
+  [CRF-d32-ari-s1] tok=  30,208 val_loss=3.3070 val_acc=0.7752 t=3.0s
+  [CRF-d32-ari-s1] tok=  35,072 val_loss=3.2261 val_acc=0.7786 t=3.8s
+  [CRF-d32-ari-s1] tok=  40,192 val_loss=3.1702 val_acc=0.7789 t=4.4s
+  [CRF-d32-ari-s1] tok=  45,056 val_loss=3.1366 val_acc=0.7789 t=5.0s
+  [CRF-d32-ari-s1] tok=  50,176 val_loss=3.1142 val_acc=0.7789 t=5.7s
+  [CRF-d32-ari-s1] FINAL tok=  50,176 val_loss=3.1142 val_acc=0.7789 t=5.9s
+  [TR-d32-ari-s1] tok=   5,120 val_loss=4.4785 val_acc=0.0481 t=0.2s
+  [TR-d32-ari-s1] tok=  10,240 val_loss=4.2806 val_acc=0.0817 t=0.4s
+  [TR-d32-ari-s1] tok=  15,104 val_loss=4.0968 val_acc=0.1908 t=0.6s
+  [TR-d32-ari-s1] tok=  20,224 val_loss=3.9316 val_acc=0.2398 t=0.8s
+  [TR-d32-ari-s1] tok=  25,088 val_loss=3.8126 val_acc=0.2325 t=1.0s
+  [TR-d32-ari-s1] tok=  30,208 val_loss=3.7226 val_acc=0.2325 t=1.3s
+  [TR-d32-ari-s1] tok=  35,072 val_loss=3.6644 val_acc=0.2325 t=1.5s
+  [TR-d32-ari-s1] tok=  40,192 val_loss=3.6251 val_acc=0.2325 t=1.7s
+  [TR-d32-ari-s1] tok=  45,056 val_loss=3.6020 val_acc=0.2325 t=2.0s
+  [TR-d32-ari-s1] tok=  50,176 val_loss=3.5859 val_acc=0.2356 t=2.3s
+  [TR-d32-ari-s1] FINAL tok=  50,176 val_loss=3.5859 val_acc=0.2356 t=2.3s
+  [saved] d=32 budget=50,000 seed=1 dataset=arithmetic
+
+--- Experiment 11/10: d=64 budget=25,000 seed=1 dataset=arithmetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=1, dataset=arithmetic, budget=25,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-ari-s1] tok=   2,560 val_loss=4.1962 val_acc=0.2542 t=0.6s
+  [CRF-d64-ari-s1] tok=   5,120 val_loss=3.8391 val_acc=0.3542 t=1.1s
+  [CRF-d64-ari-s1] tok=   7,680 val_loss=3.5566 val_acc=0.5623 t=1.6s
+  [CRF-d64-ari-s1] tok=  10,240 val_loss=3.3292 val_acc=0.6472 t=2.1s
+  [CRF-d64-ari-s1] tok=  12,544 val_loss=3.1703 val_acc=0.7384 t=2.5s
+  [CRF-d64-ari-s1] tok=  15,104 val_loss=3.0389 val_acc=0.7459 t=2.8s
+  [CRF-d64-ari-s1] tok=  17,664 val_loss=2.9497 val_acc=0.7659 t=3.1s
+  [CRF-d64-ari-s1] tok=  20,224 val_loss=2.8917 val_acc=0.7659 t=3.6s
+  [CRF-d64-ari-s1] tok=  22,528 val_loss=2.8599 val_acc=0.7691 t=4.0s
+  [CRF-d64-ari-s1] tok=  25,088 val_loss=2.8357 val_acc=0.7691 t=4.5s
+  [CRF-d64-ari-s1] FINAL tok=  25,088 val_loss=2.8357 val_acc=0.7691 t=4.7s
+  [TR-d64-ari-s1] tok=   2,560 val_loss=4.5803 val_acc=0.0094 t=0.2s
+  [TR-d64-ari-s1] tok=   5,120 val_loss=4.4785 val_acc=0.0517 t=0.4s
+  [TR-d64-ari-s1] tok=   7,680 val_loss=4.3778 val_acc=0.0694 t=0.6s
+  [TR-d64-ari-s1] tok=  10,240 val_loss=4.2855 val_acc=0.0798 t=0.9s
+  [TR-d64-ari-s1] tok=  12,544 val_loss=4.2152 val_acc=0.0488 t=1.1s
+  [TR-d64-ari-s1] tok=  15,104 val_loss=4.1544 val_acc=0.0488 t=1.3s
+  [TR-d64-ari-s1] tok=  17,664 val_loss=4.1116 val_acc=0.0800 t=1.6s
+  [TR-d64-ari-s1] tok=  20,224 val_loss=4.0845 val_acc=0.0938 t=2.0s
+  [TR-d64-ari-s1] tok=  22,528 val_loss=4.0698 val_acc=0.0938 t=2.7s
+  [TR-d64-ari-s1] tok=  25,088 val_loss=4.0586 val_acc=0.0938 t=3.2s
+  [TR-d64-ari-s1] FINAL tok=  25,088 val_loss=4.0586 val_acc=0.0938 t=3.5s
+  [saved] d=64 budget=25,000 seed=1 dataset=arithmetic
+
+--- Experiment 12/9: d=64 budget=50,000 seed=1 dataset=arithmetic ---
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=33,890 ratio=1.070
+
+  [d=64, seed=1, dataset=arithmetic, budget=50,000] CRF params=33,890 TR params=36,256
+  [CRF-d64-ari-s1] tok=   5,120 val_loss=3.9936 val_acc=0.2592 t=0.7s
+  [CRF-d64-ari-s1] tok=  10,240 val_loss=3.3930 val_acc=0.6086 t=1.2s
+  [CRF-d64-ari-s1] tok=  15,104 val_loss=2.9676 val_acc=0.7627 t=2.0s
+  [CRF-d64-ari-s1] tok=  20,224 val_loss=2.6274 val_acc=0.7797 t=2.7s
+  [CRF-d64-ari-s1] tok=  25,088 val_loss=2.3762 val_acc=0.8095 t=3.4s
+  [CRF-d64-ari-s1] tok=  30,208 val_loss=2.1885 val_acc=0.8148 t=4.0s
+  [CRF-d64-ari-s1] tok=  35,072 val_loss=2.0618 val_acc=0.8142 t=4.6s
+  [CRF-d64-ari-s1] tok=  40,192 val_loss=1.9740 val_acc=0.8255 t=5.4s
+  [CRF-d64-ari-s1] tok=  45,056 val_loss=1.9229 val_acc=0.8269 t=5.9s
+  [CRF-d64-ari-s1] tok=  50,176 val_loss=1.8876 val_acc=0.8286 t=6.7s
+  [CRF-d64-ari-s1] FINAL tok=  50,176 val_loss=1.8876 val_acc=0.8286 t=6.9s
+  [TR-d64-ari-s1] tok=   5,120 val_loss=4.5290 val_acc=0.0377 t=0.2s
+  [TR-d64-ari-s1] tok=  10,240 val_loss=4.3176 val_acc=0.0802 t=0.4s
+  [TR-d64-ari-s1] tok=  15,104 val_loss=4.1237 val_acc=0.0800 t=0.6s
+  [TR-d64-ari-s1] tok=  20,224 val_loss=3.9603 val_acc=0.1044 t=0.8s
+  [TR-d64-ari-s1] tok=  25,088 val_loss=3.8444 val_acc=0.1044 t=1.0s
+  [TR-d64-ari-s1] tok=  30,208 val_loss=3.7550 val_acc=0.1680 t=1.2s
+  [TR-d64-ari-s1] tok=  35,072 val_loss=3.6965 val_acc=0.2166 t=1.4s
+  [TR-d64-ari-s1] tok=  40,192 val_loss=3.6567 val_acc=0.2294 t=1.7s
+  [TR-d64-ari-s1] tok=  45,056 val_loss=3.6337 val_acc=0.2294 t=2.1s
+  [TR-d64-ari-s1] tok=  50,176 val_loss=3.6176 val_acc=0.2431 t=2.4s
+  [TR-d64-ari-s1] FINAL tok=  50,176 val_loss=3.6176 val_acc=0.2431 t=2.5s
+  [saved] d=64 budget=50,000 seed=1 dataset=arithmetic
+
+--- Experiment 13/8: d=32 budget=25,000 seed=0 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=13,362 ratio=1.478
+
+  [d=32, seed=0, dataset=gsm8k, budget=25,000] CRF params=13,362 TR params=19,744
+  [CRF-d32-gsm-s0] tok=   2,560 val_loss=4.4708 val_acc=0.1844 t=2.3s
+  [CRF-d32-gsm-s0] tok=   5,120 val_loss=4.3745 val_acc=0.1973 t=4.8s
+  [CRF-d32-gsm-s0] tok=   7,680 val_loss=4.3157 val_acc=0.1973 t=6.7s
+  [CRF-d32-gsm-s0] tok=  10,240 val_loss=4.2687 val_acc=0.1973 t=8.5s
+  [CRF-d32-gsm-s0] tok=  12,800 val_loss=4.2293 val_acc=0.1973 t=10.5s
+  [CRF-d32-gsm-s0] tok=  15,360 val_loss=4.1981 val_acc=0.1973 t=12.4s
+  [CRF-d32-gsm-s0] tok=  17,920 val_loss=4.1755 val_acc=0.1973 t=14.8s
+  [CRF-d32-gsm-s0] tok=  20,480 val_loss=4.1608 val_acc=0.1973 t=17.7s
+  [CRF-d32-gsm-s0] tok=  22,528 val_loss=4.1533 val_acc=0.1973 t=19.9s
+  [CRF-d32-gsm-s0] tok=  25,088 val_loss=4.1468 val_acc=0.1973 t=22.7s
+  [CRF-d32-gsm-s0] FINAL tok=  25,088 val_loss=4.1468 val_acc=0.1973 t=25.2s
+  [TR-d32-gsm-s0] tok=   2,560 val_loss=4.5569 val_acc=0.0251 t=0.6s
+  [TR-d32-gsm-s0] tok=   5,120 val_loss=4.5145 val_acc=0.0355 t=1.2s
+  [TR-d32-gsm-s0] tok=   7,680 val_loss=4.4734 val_acc=0.0439 t=1.8s
+  [TR-d32-gsm-s0] tok=  10,240 val_loss=4.4358 val_acc=0.0464 t=2.3s
+  [TR-d32-gsm-s0] tok=  12,800 val_loss=4.4033 val_acc=0.0482 t=3.0s
+  [TR-d32-gsm-s0] tok=  15,360 val_loss=4.3773 val_acc=0.0487 t=3.6s
+  [TR-d32-gsm-s0] tok=  17,920 val_loss=4.3583 val_acc=0.0491 t=4.2s
+  [TR-d32-gsm-s0] tok=  20,480 val_loss=4.3456 val_acc=0.0497 t=5.0s
+  [TR-d32-gsm-s0] tok=  22,528 val_loss=4.3391 val_acc=0.0497 t=5.6s
+  [TR-d32-gsm-s0] tok=  25,088 val_loss=4.3335 val_acc=0.0498 t=6.2s
+  [TR-d32-gsm-s0] FINAL tok=  25,088 val_loss=4.3335 val_acc=0.0498 t=6.8s
+  [saved] d=32 budget=25,000 seed=0 dataset=gsm8k
+
+--- Experiment 14/7: d=32 budget=50,000 seed=0 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=13,362 ratio=1.478
+
+  [d=32, seed=0, dataset=gsm8k, budget=50,000] CRF params=13,362 TR params=19,744
+  [CRF-d32-gsm-s0] tok=   5,120 val_loss=4.4115 val_acc=0.1972 t=1.7s
+  [CRF-d32-gsm-s0] tok=  10,240 val_loss=4.2834 val_acc=0.1973 t=3.5s
+  [CRF-d32-gsm-s0] tok=  15,360 val_loss=4.1791 val_acc=0.1973 t=5.4s
+  [CRF-d32-gsm-s0] tok=  20,480 val_loss=4.0844 val_acc=0.1973 t=8.0s
+  [CRF-d32-gsm-s0] tok=  25,088 val_loss=4.0142 val_acc=0.1973 t=9.7s
+  [CRF-d32-gsm-s0] tok=  30,208 val_loss=3.9538 val_acc=0.1973 t=11.6s
+  [CRF-d32-gsm-s0] tok=  35,328 val_loss=3.9124 val_acc=0.2130 t=13.7s
+  [CRF-d32-gsm-s0] tok=  40,448 val_loss=3.8858 val_acc=0.2130 t=15.6s
+  [CRF-d32-gsm-s0] tok=  45,056 val_loss=3.8710 val_acc=0.2130 t=17.8s
+  [CRF-d32-gsm-s0] tok=  50,176 val_loss=3.8601 val_acc=0.2130 t=20.1s
+  [CRF-d32-gsm-s0] FINAL tok=  50,176 val_loss=3.8601 val_acc=0.2130 t=22.1s
+  [TR-d32-gsm-s0] tok=   5,120 val_loss=4.5356 val_acc=0.0307 t=1.0s
+  [TR-d32-gsm-s0] tok=  10,240 val_loss=4.4488 val_acc=0.0468 t=1.7s
+  [TR-d32-gsm-s0] tok=  15,360 val_loss=4.3616 val_acc=0.0493 t=2.6s
+  [TR-d32-gsm-s0] tok=  20,480 val_loss=4.2774 val_acc=0.0508 t=3.6s
+  [TR-d32-gsm-s0] tok=  25,088 val_loss=4.2088 val_acc=0.0531 t=4.5s
+  [TR-d32-gsm-s0] tok=  30,208 val_loss=4.1458 val_acc=0.0547 t=5.3s
+  [TR-d32-gsm-s0] tok=  35,328 val_loss=4.0996 val_acc=0.0560 t=6.4s
+  [TR-d32-gsm-s0] tok=  40,448 val_loss=4.0695 val_acc=0.0553 t=7.0s
+  [TR-d32-gsm-s0] tok=  45,056 val_loss=4.0525 val_acc=0.0555 t=7.7s
+  [TR-d32-gsm-s0] tok=  50,176 val_loss=4.0399 val_acc=0.0556 t=8.4s
+  [TR-d32-gsm-s0] FINAL tok=  50,176 val_loss=4.0399 val_acc=0.0556 t=8.9s
+  [saved] d=32 budget=50,000 seed=0 dataset=gsm8k
+
+--- Experiment 15/6: d=64 budget=25,000 seed=0 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=35,938 ratio=1.009
+
+  [d=64, seed=0, dataset=gsm8k, budget=25,000] CRF params=35,938 TR params=36,256
+  [CRF-d64-gsm-s0] tok=   2,560 val_loss=4.4015 val_acc=0.1646 t=1.8s
+  [CRF-d64-gsm-s0] tok=   5,120 val_loss=4.2241 val_acc=0.2011 t=3.1s
+  [CRF-d64-gsm-s0] tok=   7,680 val_loss=4.1057 val_acc=0.1973 t=4.7s
+  [CRF-d64-gsm-s0] tok=  10,240 val_loss=4.0154 val_acc=0.1973 t=6.0s
+  [CRF-d64-gsm-s0] tok=  12,800 val_loss=3.9398 val_acc=0.1973 t=8.2s
+  [CRF-d64-gsm-s0] tok=  15,360 val_loss=3.8809 val_acc=0.1973 t=10.7s
+  [CRF-d64-gsm-s0] tok=  17,920 val_loss=3.8384 val_acc=0.1985 t=12.9s
+  [CRF-d64-gsm-s0] tok=  20,480 val_loss=3.8111 val_acc=0.2000 t=14.6s
+  [CRF-d64-gsm-s0] tok=  22,528 val_loss=3.7976 val_acc=0.2167 t=16.8s
+  [CRF-d64-gsm-s0] tok=  25,088 val_loss=3.7862 val_acc=0.2177 t=19.4s
+  [CRF-d64-gsm-s0] FINAL tok=  25,088 val_loss=3.7862 val_acc=0.2177 t=21.2s
+  [TR-d64-gsm-s0] tok=   2,560 val_loss=4.5772 val_acc=0.0023 t=1.0s
+  [TR-d64-gsm-s0] tok=   5,120 val_loss=4.5338 val_acc=0.0124 t=2.0s
+  [TR-d64-gsm-s0] tok=   7,680 val_loss=4.4918 val_acc=0.0445 t=3.2s
+  [TR-d64-gsm-s0] tok=  10,240 val_loss=4.4531 val_acc=0.0701 t=4.1s
+  [TR-d64-gsm-s0] tok=  12,800 val_loss=4.4197 val_acc=0.0815 t=4.7s
+  [TR-d64-gsm-s0] tok=  15,360 val_loss=4.3930 val_acc=0.0866 t=5.3s
+  [TR-d64-gsm-s0] tok=  17,920 val_loss=4.3733 val_acc=0.0903 t=5.9s
+  [TR-d64-gsm-s0] tok=  20,480 val_loss=4.3602 val_acc=0.0940 t=6.6s
+  [TR-d64-gsm-s0] tok=  22,528 val_loss=4.3534 val_acc=0.0947 t=7.4s
+  [TR-d64-gsm-s0] tok=  25,088 val_loss=4.3476 val_acc=0.0965 t=8.2s
+  [TR-d64-gsm-s0] FINAL tok=  25,088 val_loss=4.3476 val_acc=0.0965 t=9.2s
+  [saved] d=64 budget=25,000 seed=0 dataset=gsm8k
+
+--- Experiment 16/5: d=64 budget=50,000 seed=0 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=35,938 ratio=1.009
+
+  [d=64, seed=0, dataset=gsm8k, budget=50,000] CRF params=35,938 TR params=36,256
+  [CRF-d64-gsm-s0] tok=   5,120 val_loss=4.2968 val_acc=0.1982 t=1.3s
+  [CRF-d64-gsm-s0] tok=  10,240 val_loss=4.0436 val_acc=0.1973 t=3.2s
+  [CRF-d64-gsm-s0] tok=  15,360 val_loss=3.8469 val_acc=0.1973 t=5.3s
+  [CRF-d64-gsm-s0] tok=  20,480 val_loss=3.6802 val_acc=0.2211 t=7.0s
+  [CRF-d64-gsm-s0] tok=  25,088 val_loss=3.5710 val_acc=0.2270 t=9.5s
+  [CRF-d64-gsm-s0] tok=  30,208 val_loss=3.4834 val_acc=0.2300 t=11.5s
+  [CRF-d64-gsm-s0] tok=  35,328 val_loss=3.4252 val_acc=0.2413 t=13.2s
+  [CRF-d64-gsm-s0] tok=  40,448 val_loss=3.3888 val_acc=0.2445 t=15.2s
+  [CRF-d64-gsm-s0] tok=  45,056 val_loss=3.3689 val_acc=0.2477 t=17.7s
+  [CRF-d64-gsm-s0] tok=  50,176 val_loss=3.3545 val_acc=0.2476 t=20.1s
+  [CRF-d64-gsm-s0] FINAL tok=  50,176 val_loss=3.3545 val_acc=0.2476 t=22.1s
+  [TR-d64-gsm-s0] tok=   5,120 val_loss=4.5557 val_acc=0.0046 t=1.2s
+  [TR-d64-gsm-s0] tok=  10,240 val_loss=4.4674 val_acc=0.0597 t=2.1s
+  [TR-d64-gsm-s0] tok=  15,360 val_loss=4.3780 val_acc=0.0905 t=3.1s
+  [TR-d64-gsm-s0] tok=  20,480 val_loss=4.2910 val_acc=0.1238 t=4.1s
+  [TR-d64-gsm-s0] tok=  25,088 val_loss=4.2204 val_acc=0.1351 t=4.9s
+  [TR-d64-gsm-s0] tok=  30,208 val_loss=4.1565 val_acc=0.1471 t=5.8s
+  [TR-d64-gsm-s0] tok=  35,328 val_loss=4.1101 val_acc=0.1565 t=6.7s
+  [TR-d64-gsm-s0] tok=  40,448 val_loss=4.0801 val_acc=0.1641 t=7.7s
+  [TR-d64-gsm-s0] tok=  45,056 val_loss=4.0634 val_acc=0.1678 t=8.9s
+  [TR-d64-gsm-s0] tok=  50,176 val_loss=4.0510 val_acc=0.1694 t=9.8s
+  [TR-d64-gsm-s0] FINAL tok=  50,176 val_loss=4.0510 val_acc=0.1694 t=10.7s
+  [saved] d=64 budget=50,000 seed=0 dataset=gsm8k
+
+--- Experiment 17/4: d=32 budget=25,000 seed=1 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=13,362 ratio=1.478
+
+  [d=32, seed=1, dataset=gsm8k, budget=25,000] CRF params=13,362 TR params=19,744
+  [CRF-d32-gsm-s1] tok=   2,560 val_loss=4.4934 val_acc=0.0909 t=2.0s
+  [CRF-d32-gsm-s1] tok=   5,120 val_loss=4.4116 val_acc=0.1993 t=3.4s
+  [CRF-d32-gsm-s1] tok=   7,680 val_loss=4.3549 val_acc=0.2018 t=4.8s
+  [CRF-d32-gsm-s1] tok=  10,240 val_loss=4.3063 val_acc=0.2036 t=6.2s
+  [CRF-d32-gsm-s1] tok=  12,800 val_loss=4.2650 val_acc=0.2057 t=7.6s
+  [CRF-d32-gsm-s1] tok=  15,360 val_loss=4.2319 val_acc=0.2072 t=9.0s
+  [CRF-d32-gsm-s1] tok=  17,920 val_loss=4.2081 val_acc=0.2135 t=10.5s
+  [CRF-d32-gsm-s1] tok=  20,480 val_loss=4.1927 val_acc=0.2160 t=11.9s
+  [CRF-d32-gsm-s1] tok=  22,528 val_loss=4.1848 val_acc=0.2171 t=13.3s
+  [CRF-d32-gsm-s1] tok=  25,088 val_loss=4.1780 val_acc=0.2178 t=14.8s
+  [CRF-d32-gsm-s1] FINAL tok=  25,088 val_loss=4.1780 val_acc=0.2178 t=16.1s
+  [TR-d32-gsm-s1] tok=   2,560 val_loss=4.5439 val_acc=0.0392 t=0.4s
+  [TR-d32-gsm-s1] tok=   5,120 val_loss=4.5014 val_acc=0.0552 t=0.8s
+  [TR-d32-gsm-s1] tok=   7,680 val_loss=4.4605 val_acc=0.0683 t=1.2s
+  [TR-d32-gsm-s1] tok=  10,240 val_loss=4.4231 val_acc=0.0783 t=1.7s
+  [TR-d32-gsm-s1] tok=  12,800 val_loss=4.3911 val_acc=0.0879 t=2.2s
+  [TR-d32-gsm-s1] tok=  15,360 val_loss=4.3658 val_acc=0.0922 t=2.8s
+  [TR-d32-gsm-s1] tok=  17,920 val_loss=4.3474 val_acc=0.0980 t=3.5s
+  [TR-d32-gsm-s1] tok=  20,480 val_loss=4.3352 val_acc=0.1008 t=4.3s
+  [TR-d32-gsm-s1] tok=  22,528 val_loss=4.3289 val_acc=0.1036 t=4.8s
+  [TR-d32-gsm-s1] tok=  25,088 val_loss=4.3235 val_acc=0.1047 t=5.2s
+  [TR-d32-gsm-s1] FINAL tok=  25,088 val_loss=4.3235 val_acc=0.1047 t=5.8s
+  [saved] d=32 budget=25,000 seed=1 dataset=gsm8k
+
+--- Experiment 18/3: d=32 budget=50,000 seed=1 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=1 h=8 params=19,744 target=13,362 ratio=1.478
+
+  [d=32, seed=1, dataset=gsm8k, budget=50,000] CRF params=13,362 TR params=19,744
+  [CRF-d32-gsm-s1] tok=   5,120 val_loss=4.4453 val_acc=0.1842 t=1.9s
+  [CRF-d32-gsm-s1] tok=  10,240 val_loss=4.3215 val_acc=0.2027 t=3.8s
+  [CRF-d32-gsm-s1] tok=  15,360 val_loss=4.2112 val_acc=0.2097 t=6.2s
+  [CRF-d32-gsm-s1] tok=  20,480 val_loss=4.1122 val_acc=0.2393 t=7.9s
+  [CRF-d32-gsm-s1] tok=  25,088 val_loss=4.0405 val_acc=0.2455 t=9.5s
+  [CRF-d32-gsm-s1] tok=  30,208 val_loss=3.9799 val_acc=0.2471 t=11.3s
+  [CRF-d32-gsm-s1] tok=  35,328 val_loss=3.9383 val_acc=0.2480 t=12.8s
+  [CRF-d32-gsm-s1] tok=  40,448 val_loss=3.9118 val_acc=0.2451 t=14.5s
+  [CRF-d32-gsm-s1] tok=  45,056 val_loss=3.8972 val_acc=0.2489 t=16.1s
+  [CRF-d32-gsm-s1] tok=  50,176 val_loss=3.8862 val_acc=0.2486 t=17.8s
+  [CRF-d32-gsm-s1] FINAL tok=  50,176 val_loss=3.8862 val_acc=0.2486 t=19.3s
+  [TR-d32-gsm-s1] tok=   5,120 val_loss=4.5227 val_acc=0.0479 t=0.5s
+  [TR-d32-gsm-s1] tok=  10,240 val_loss=4.4368 val_acc=0.0754 t=1.1s
+  [TR-d32-gsm-s1] tok=  15,360 val_loss=4.3515 val_acc=0.1012 t=1.7s
+  [TR-d32-gsm-s1] tok=  20,480 val_loss=4.2698 val_acc=0.1414 t=2.3s
+  [TR-d32-gsm-s1] tok=  25,088 val_loss=4.2040 val_acc=0.1605 t=2.8s
+  [TR-d32-gsm-s1] tok=  30,208 val_loss=4.1438 val_acc=0.1728 t=3.4s
+  [TR-d32-gsm-s1] tok=  35,328 val_loss=4.0995 val_acc=0.1813 t=3.9s
+  [TR-d32-gsm-s1] tok=  40,448 val_loss=4.0702 val_acc=0.1884 t=4.4s
+  [TR-d32-gsm-s1] tok=  45,056 val_loss=4.0536 val_acc=0.1896 t=4.9s
+  [TR-d32-gsm-s1] tok=  50,176 val_loss=4.0412 val_acc=0.1908 t=5.4s
+  [TR-d32-gsm-s1] FINAL tok=  50,176 val_loss=4.0412 val_acc=0.1908 t=5.9s
+  [saved] d=32 budget=50,000 seed=1 dataset=gsm8k
+
+--- Experiment 19/2: d=64 budget=25,000 seed=1 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=35,938 ratio=1.009
+
+  [d=64, seed=1, dataset=gsm8k, budget=25,000] CRF params=35,938 TR params=36,256
+  [CRF-d64-gsm-s1] tok=   2,560 val_loss=4.3764 val_acc=0.1948 t=1.7s
+  [CRF-d64-gsm-s1] tok=   5,120 val_loss=4.1758 val_acc=0.1973 t=3.2s
+  [CRF-d64-gsm-s1] tok=   7,680 val_loss=4.0604 val_acc=0.1973 t=4.9s
+  [CRF-d64-gsm-s1] tok=  10,240 val_loss=3.9777 val_acc=0.1973 t=6.3s
+  [CRF-d64-gsm-s1] tok=  12,800 val_loss=3.9078 val_acc=0.1973 t=7.9s
+  [CRF-d64-gsm-s1] tok=  15,360 val_loss=3.8516 val_acc=0.1973 t=9.5s
+  [CRF-d64-gsm-s1] tok=  17,920 val_loss=3.8113 val_acc=0.1973 t=10.7s
+  [CRF-d64-gsm-s1] tok=  20,480 val_loss=3.7850 val_acc=0.1973 t=12.4s
+  [CRF-d64-gsm-s1] tok=  22,528 val_loss=3.7716 val_acc=0.1973 t=14.0s
+  [CRF-d64-gsm-s1] tok=  25,088 val_loss=3.7602 val_acc=0.1973 t=15.7s
+  [CRF-d64-gsm-s1] FINAL tok=  25,088 val_loss=3.7602 val_acc=0.1973 t=17.8s
+  [TR-d64-gsm-s1] tok=   2,560 val_loss=4.6008 val_acc=0.0128 t=1.0s
+  [TR-d64-gsm-s1] tok=   5,120 val_loss=4.5578 val_acc=0.0383 t=2.0s
+  [TR-d64-gsm-s1] tok=   7,680 val_loss=4.5162 val_acc=0.0461 t=2.8s
+  [TR-d64-gsm-s1] tok=  10,240 val_loss=4.4777 val_acc=0.0533 t=3.6s
+  [TR-d64-gsm-s1] tok=  12,800 val_loss=4.4442 val_acc=0.0620 t=4.4s
+  [TR-d64-gsm-s1] tok=  15,360 val_loss=4.4175 val_acc=0.0661 t=5.1s
+  [TR-d64-gsm-s1] tok=  17,920 val_loss=4.3978 val_acc=0.0684 t=6.0s
+  [TR-d64-gsm-s1] tok=  20,480 val_loss=4.3848 val_acc=0.0695 t=10.5s
+  [TR-d64-gsm-s1] tok=  22,528 val_loss=4.3781 val_acc=0.0700 t=12.1s
+  [TR-d64-gsm-s1] tok=  25,088 val_loss=4.3723 val_acc=0.0705 t=12.9s
+  [TR-d64-gsm-s1] FINAL tok=  25,088 val_loss=4.3723 val_acc=0.0705 t=13.8s
+  [saved] d=64 budget=25,000 seed=1 dataset=gsm8k
+
+--- Experiment 20/1: d=64 budget=50,000 seed=1 dataset=gsm8k ---
+[data] Loaded 7473 chunks from GSM8K/train
+[data] Loaded 1319 chunks from GSM8K/test
+    [Transformer match] d=32 L=2 h=8 params=36,256 target=35,938 ratio=1.009
+
+  [d=64, seed=1, dataset=gsm8k, budget=50,000] CRF params=35,938 TR params=36,256
+  [CRF-d64-gsm-s1] tok=   5,120 val_loss=4.2548 val_acc=0.1970 t=2.3s
+  [CRF-d64-gsm-s1] tok=  10,240 val_loss=4.0037 val_acc=0.1973 t=5.4s
+  [CRF-d64-gsm-s1] tok=  15,360 val_loss=3.8202 val_acc=0.1973 t=7.4s
+  [CRF-d64-gsm-s1] tok=  20,480 val_loss=3.6580 val_acc=0.1973 t=9.4s
+  [CRF-d64-gsm-s1] tok=  25,088 val_loss=3.5488 val_acc=0.2130 t=12.0s
+  [CRF-d64-gsm-s1] tok=  30,208 val_loss=3.4645 val_acc=0.2131 t=14.7s
+  [CRF-d64-gsm-s1] tok=  35,328 val_loss=3.4089 val_acc=0.2131 t=17.2s
+  [CRF-d64-gsm-s1] tok=  40,448 val_loss=3.3741 val_acc=0.2133 t=19.4s
+  [CRF-d64-gsm-s1] tok=  45,056 val_loss=3.3549 val_acc=0.2144 t=22.0s
+  [CRF-d64-gsm-s1] tok=  50,176 val_loss=3.3410 val_acc=0.2186 t=24.8s
+  [CRF-d64-gsm-s1] FINAL tok=  50,176 val_loss=3.3410 val_acc=0.2186 t=26.9s
+  [TR-d64-gsm-s1] tok=   5,120 val_loss=4.5792 val_acc=0.0185 t=0.9s
+  [TR-d64-gsm-s1] tok=  10,240 val_loss=4.4913 val_acc=0.0522 t=1.7s
+  [TR-d64-gsm-s1] tok=  15,360 val_loss=4.4019 val_acc=0.0696 t=2.7s
+  [TR-d64-gsm-s1] tok=  20,480 val_loss=4.3151 val_acc=0.0753 t=3.6s
+  [TR-d64-gsm-s1] tok=  25,088 val_loss=4.2449 val_acc=0.0778 t=4.5s
+  [TR-d64-gsm-s1] tok=  30,208 val_loss=4.1816 val_acc=0.0832 t=5.3s
+  [TR-d64-gsm-s1] tok=  35,328 val_loss=4.1360 val_acc=0.0836 t=6.3s
+  [TR-d64-gsm-s1] tok=  40,448 val_loss=4.1064 val_acc=0.0842 t=7.2s
+  [TR-d64-gsm-s1] tok=  45,056 val_loss=4.0898 val_acc=0.0844 t=8.3s
+  [TR-d64-gsm-s1] tok=  50,176 val_loss=4.0775 val_acc=0.0846 t=9.4s
+  [TR-d64-gsm-s1] FINAL tok=  50,176 val_loss=4.0775 val_acc=0.0846 t=10.3s
+  [saved] d=64 budget=50,000 seed=1 dataset=gsm8k
+
+==================================================================================================================================
+HYPOTHESIS SWEEP - AGGREGATE RESULTS
+==================================================================================================================================
+   d seed dataset          budget   TR_acc  CRF_acc  CRF/TR tok_eff  acc/FLOP acc/param  hyp?
+----------------------------------------------------------------------------------------------------------------------------------
+  32    0 arithmetic       25,000   0.1181   0.7153   6.06x    6.9x     23.9x      9.7x     Y
+  32    0 arithmetic       50,000   0.2431   0.7970   3.28x    4.9x     12.9x      5.2x     Y
+  32    1 arithmetic       25,000   0.2234   0.6930   3.10x    7.9x     12.3x      5.0x     Y
+  32    1 arithmetic       50,000   0.2356   0.7789   3.31x    4.0x     13.1x      5.3x     Y
+  64    0 arithmetic       25,000   0.2325   0.7703   3.31x    6.9x      3.6x      3.5x     Y
+  64    0 arithmetic       50,000   0.2325   0.8573   3.69x    3.0x      3.9x      3.9x     Y
+  64    1 arithmetic       25,000   0.0938   0.7691   8.20x    7.9x      8.8x      8.8x     Y
+  64    1 arithmetic       50,000   0.2431   0.8286   3.41x    7.8x      3.7x      3.6x     Y
+  32    0 gsm8k            25,000   0.0498   0.1973   3.96x    4.0x     35.8x      5.9x     Y
+  32    0 gsm8k            50,000   0.0556   0.2130   3.83x    4.0x     34.6x      5.7x     Y
+  32    1 gsm8k            25,000   0.1047   0.2178   2.08x    3.5x     18.8x      3.1x     Y
+  32    1 gsm8k            50,000   0.1908   0.2489   1.30x    5.9x     11.8x      1.9x     Y
+  64    0 gsm8k            25,000   0.0965   0.2177   2.26x    7.0x      5.5x      2.3x     Y
+  64    0 gsm8k            50,000   0.1694   0.2477   1.46x    6.9x      3.6x      1.5x     Y
+  64    1 gsm8k            25,000   0.0705   0.1973   2.80x    6.0x      6.9x      2.8x     Y
+  64    1 gsm8k            50,000   0.0846   0.2186   2.58x    4.9x      6.3x      2.6x     Y
+  32    0 synthetic        25,000   0.1075   0.2871   2.67x    7.9x     10.5x      4.3x     Y
+  32    0 synthetic        50,000   0.2005   0.3629   1.81x    8.8x      7.1x      2.9x     Y
+  32    1 synthetic        25,000   0.2121   0.3298   1.55x    7.9x      6.1x      2.5x     Y
+  32    1 synthetic        50,000   0.2190   0.3928   1.79x    3.0x      7.1x      2.9x     Y
+  64    0 synthetic        25,000   0.2190   0.3922   1.79x    6.9x      1.9x      1.9x     Y
+  64    0 synthetic        50,000   0.2190   0.4119   1.88x    3.0x      2.0x      2.0x     Y
+  64    1 synthetic        25,000   0.0619   0.3880   6.27x    4.9x      6.7x      6.7x     Y
+  64    1 synthetic        50,000   0.1716   0.4100   2.39x    7.8x      2.6x      2.6x     Y
+----------------------------------------------------------------------------------------------------------------------------------
+
+Hypothesis supported: 24/24 settings (100%)
+Avg token efficiency:  5.90x (CRF needs 1 token vs TR's 5.9x)
+Avg FLOP efficiency:   19.67x
+Avg time efficiency:   2.45x
+Avg acc/FLOP ratio:    10.39x (CRF accuracy per FLOP vs TR)
+Avg acc/param ratio:   4.02x (CRF accuracy per param vs TR)
+==================================================================================================================================
+
+Full summary saved to /home/dev/Desktop/code/pc-ai/results/hypothesis_sweep_summary.json
+
+[plot] saved /home/dev/Desktop/code/pc-ai/results/fig_efficiency_curves.png

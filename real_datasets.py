@@ -45,7 +45,7 @@ class HumanEvalDataset(Dataset):
             from datasets import load_dataset
             
             ds = load_dataset(
-                'openai_humaneval',
+                'openai/humaneval',
                 split=split,
                 cache_dir=cache_dir,
             )
@@ -117,7 +117,7 @@ class GSM8KDataset(Dataset):
             from datasets import load_dataset
             
             ds = load_dataset(
-                'gsm8k',
+                'openai/gsm8k',
                 'main',
                 split=split,
                 cache_dir=cache_dir,
@@ -215,7 +215,7 @@ class ARCAGIDataset(Dataset):
             from datasets import load_dataset
             
             ds = load_dataset(
-                'jaymody/arc',
+                'fchollet/ARC-AGI',
                 split=split,
                 cache_dir=cache_dir,
             )
@@ -331,7 +331,7 @@ class RealDatasetFactory:
         return ['tinystories', 'humaneval', 'gsm8k', 'arc']
     
     @staticmethod
-    def check_dataset_availability(name: str) -> Dict[str, bool]:
+    def check_dataset_availability(name: Optional[str] = None) -> Dict[str, bool]:
         """
         Check which datasets are available (can be downloaded).
         
