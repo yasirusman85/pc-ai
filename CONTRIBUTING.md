@@ -122,16 +122,9 @@ Enhancement suggestions are welcome! Please include:
 
 ```
 pc-ai/
-├── crf_vectorized.py      # Core CRF implementation
-├── transformer.py         # Transformer baseline
-├── train.py               # Training pipeline
-├── benchmark.py           # Experiments
-├── data.py                # Dataset loaders
-├── real_datasets.py       # Real dataset integration
-├── metrics.py             # Evaluation metrics
-├── ablations.py           # Ablation configurations
-├── plot.py                # Visualization
-├── config_loader.py       # Configuration management
+├── src/
+│   └── crf_reasoning/     # Core package implementation
+├── scripts/               # Train/benchmark/plot entry points
 ├── config/                # Configuration files
 ├── tests/                 # Test suite
 ├── docs/                  # Documentation

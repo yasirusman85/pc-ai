@@ -14,8 +14,8 @@ requirements_file = Path(__file__).parent / "requirements.txt"
 requirements = []
 if requirements_file.exists():
     requirements = [
-        line.strip() 
-        for line in requirements_file.read_text().splitlines() 
+        line.strip()
+        for line in requirements_file.read_text().splitlines()
         if line.strip() and not line.startswith("#")
     ]
 
@@ -33,7 +33,11 @@ setup(
         "Source": "https://github.com/yourusername/pc-ai",
         "Documentation": "https://github.com/yourusername/pc-ai/blob/main/README.md",
     },
-    packages=find_packages(exclude=["tests", "tests.*", "results", "results.*"]),
+    package_dir={"": "src", "scripts": "scripts"},
+    packages=find_packages(
+        where="src", exclude=["tests", "tests.*", "results", "results.*"]
+    )
+    + ["scripts"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
@@ -62,8 +66,8 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "crf-benchmark=benchmark:main",
-            "crf-plot=plot:main",
+            "crf-benchmark=scripts.benchmark:main",
+            "crf-plot=scripts.plot:main",
         ],
     },
     include_package_data=True,
