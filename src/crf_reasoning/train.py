@@ -425,6 +425,62 @@ def make_matched_transformer(
     return model.to(device)
 
 
+def make_flop_matched_transformer(
+    vocab_size:    int,
+    target_flops:  int,
+    seq_len:       int,
+    max_seq_len:   int = 128,
+    device:        torch.device = torch.device('cpu'),
+):
+    """
+    Searches a dense (d_model, n_layers) grid to find transformer whose
+    per-forward FLOPs (estimate_transformer_flops) are closest to
+    target_flops. Answers: "does CRF win when the Transformer is given
+    equal compute per sample?" Uses same vocab, tie_weights=True,
+    SwiGLU activation.
+    """
+    from transformer import GPT
+    from metrics import estimate_transformer_flops
+
+    best_model  = None
+    best_delta  = float('inf')
+    best_cfg    = None
+
+    # Dense grid: every 8 in small range, every 16 in mid, every 32 in large
+    d_values = list(range(32, 128, 8)) + list(range(128, 256, 16)) + list(range(256, 512, 32))
+    l_values = list(range(1, 9))
+
+    for d in d_values:
+        for L in l_values:
+            flops = estimate_transformer_flops(seq_len, d, L)
+            delta = abs(flops - target_flops)
+            better = best_cfg is None or delta < best_delta
+            tie_over = best_cfg is not None and delta == best_delta and flops > target_flops
+            if better or tie_over:
+                best_delta = delta
+                best_cfg   = (d, L)
+
+    d, L = best_cfg
+    n_heads = next(h for h in [8, 4, 2, 1] if d % h == 0)
+    model = GPT(
+        vocab_size  = vocab_size,
+        d_model     = d,
+        n_heads     = n_heads,
+        n_layers    = L,
+        max_seq_len = max_seq_len,
+        dropout     = 0.0,
+        tie_weights = True,
+        activation  = 'swiglu',
+    )
+    actual = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    actual_flops = estimate_transformer_flops(seq_len, d, L)
+    print(f"    [Transformer FLOP-match] d={d} L={L} h={n_heads} "
+          f"params={actual:,} flops={actual_flops:,} target={target_flops:,} "
+          f"flop_ratio={actual_flops/max(1,target_flops):.3f}")
+
+    return model.to(device)
+
+
 # ─── Quick smoke test ────────────────────────────────────────────────────────
 
 if __name__ == '__main__':

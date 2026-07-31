@@ -10,10 +10,12 @@ Provides:
 """
 
 import os
+import sys
 import math
 import random
 import struct
 import hashlib
+from pathlib import Path
 from typing import List, Tuple, Optional
 
 import torch
@@ -524,7 +526,11 @@ def get_datasets(
         val_ds   = ChainOfThoughtDataset(max_val, seq_len, seed=99, tokenizer=tok)
     elif name == 'shakespeare':
         # Real language modeling data (Tiny Shakespeare, 1.1M chars)
-        from shakespeare_dataset import get_shakespeare_datasets
+        try:
+            from shakespeare_dataset import get_shakespeare_datasets
+        except ImportError:
+            sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'experiments' / 'real_experiments'))
+            from shakespeare_dataset import get_shakespeare_datasets
         train_ds, val_ds = get_shakespeare_datasets(
             seq_len=seq_len, train_ratio=0.9, tokenizer=tok
         )

@@ -34,7 +34,8 @@ from metrics import estimate_crf_flops, estimate_transformer_flops, perplexity
 from train import count_gpt_params
 
 
-RESULTS_DIR = Path(__file__).parent / 'results'
+# Repo-root results dir (survives src/ package move)
+RESULTS_DIR = Path(__file__).parent.parent.parent / 'results'
 DEVICE = torch.device('cpu')
 
 
@@ -56,6 +57,7 @@ class SweepConfig:
     budgets: List[int]  = field(default_factory=lambda: [25_000, 50_000, 100_000])
     seeds: List[int]    = field(default_factory=lambda: [0, 1, 2])
     datasets: List[str] = field(default_factory=lambda: ['synthetic', 'arithmetic'])
+    tr_match: str = 'param'
     seq_len: int = 32
     batch_size: int = 8
     max_train: int = 2000
@@ -124,6 +126,8 @@ class ExperimentResult:
     time_efficiency: float
     # Hypothesis: CRF reaches >=90% TR final acc with <=50% tokens
     hypothesis_supported: bool
+    # Matching mode used for the Transformer baseline ('param' | 'flop')
+    tr_match: str = 'param'
     # Learning curves (tokens, acc) for plotting
     crf_curve: list = field(default_factory=list)
     tr_curve: list = field(default_factory=list)
@@ -243,9 +247,10 @@ def train_budget(
 def run_experiment(
     d_model: int, budget: int, seed: int, dataset: str,
     seq_len: int = 32, batch_size: int = 8, max_train: int = 2000, max_val: int = 200,
+    tr_match: str = 'param',
     verbose: bool = True,
 ) -> ExperimentResult:
-    """Train param-matched CRF & Transformer; return result."""
+    """Train CRF & Transformer (param- or FLOP-matched); return result."""
     presets = SIZE_PRESETS.get(d_model, SIZE_PRESETS[64])
     torch.manual_seed(seed)
     tok = CharTokenizer()
@@ -263,9 +268,19 @@ def run_experiment(
                         n_crf_steps=presets['n_steps'], k_neighbors=presets['k'],
                         max_seq_len=seq_len)
     crf = make_crf(mcfg, 'full')
-    tr = make_transformer(mcfg, target_params=crf.n_params)
+    if tr_match == 'flop':
+        from train import make_flop_matched_transformer
+        crf_fwd = estimate_crf_flops(crf.crf.n_init, crf.crf.d_model,
+                                     crf.crf.program.gate[0].out_features,
+                                     crf.crf.fabric.k, crf.n_crf_steps)
+        tr = make_flop_matched_transformer(vocab_size=tok.vocab_size,
+                                           target_flops=crf_fwd, seq_len=seq_len,
+                                           max_seq_len=seq_len)
+    else:
+        tr = make_transformer(mcfg, target_params=crf.n_params)
     if verbose:
-        print(f"\n  [d={d_model}, seed={seed}, dataset={dataset}, budget={budget:,}] "
+        print(f"\n  [d={d_model}, seed={seed}, dataset={dataset}, budget={budget:,}, "
+              f"tr_match={tr_match}] "
               f"CRF params={crf.n_params:,} TR params={sum(p.numel() for p in tr.parameters()):,}")
     name = f"CRF-d{d_model}-{dataset[:3]}-s{seed}"
     crf_run = train_budget(crf, 'crf', tr_dl, va_dl, budget_tokens=budget,
@@ -285,6 +300,7 @@ def run_experiment(
         tr_final_ppl=tr_run.snapshots[-1].val_ppl,
         crf_time_s=crf_run.total_time_s, tr_time_s=tr_run.total_time_s,
         crf_flops=crf_run.total_flops, tr_flops=tr_run.total_flops,
+        tr_match=tr_match,
         token_efficiency=s.get('token_efficiency_ratio') or 0.0,
         flops_efficiency=s.get('flops_efficiency_ratio') or 0.0,
         time_efficiency=s.get('time_efficiency_ratio') or 0.0,
@@ -356,10 +372,11 @@ def compute_efficiency(run_crf: EfficiencyRun, run_tr: EfficiencyRun) -> Dict:
 # ─── Sweep runner with incremental save/load ─────────────────────────────
 
 RESULTS_PATH = RESULTS_DIR / 'hypothesis_sweep_results.json'
+SUMMARY_PATH = RESULTS_DIR / 'hypothesis_sweep_summary.json'
 
 
 def experiment_key(r: ExperimentResult) -> tuple:
-    return (r.d_model, r.budget, r.seed, r.dataset)
+    return (r.d_model, r.budget, r.seed, r.dataset, r.tr_match)
 
 
 def load_results() -> List[ExperimentResult]:
@@ -371,6 +388,7 @@ def load_results() -> List[ExperimentResult]:
             for k in ('crf_acc_per_param', 'tr_acc_per_param',
                       'crf_acc_per_flop', 'tr_acc_per_flop'):
                 item.setdefault(k, 0.0)
+            item.setdefault('tr_match', 'param')
             item.setdefault('crf_curve', [])
             item.setdefault('tr_curve', [])
             out.append(ExperimentResult(**item))
@@ -397,17 +415,19 @@ def run_sweep(cfg: SweepConfig) -> List[ExperimentResult]:
         for seed in cfg.seeds:
             for d_model in cfg.d_models:
                 for budget in cfg.budgets:
-                    key = (d_model, budget, seed, dataset)
+                    key = (d_model, budget, seed, dataset, cfg.tr_match)
                     if key in completed_keys:
                         continue
                     run_idx += 1
                     print(f'\n--- Experiment {run_idx}/{total - len(completed)}: '
-                          f'd={d_model} budget={budget:,} seed={seed} dataset={dataset} ---')
+                          f'd={d_model} budget={budget:,} seed={seed} dataset={dataset} '
+                          f'tr_match={cfg.tr_match} ---')
                     try:
                         result = run_experiment(
                             d_model=d_model, budget=budget, seed=seed, dataset=dataset,
                             seq_len=cfg.seq_len, batch_size=cfg.batch_size,
                             max_train=cfg.max_train, max_val=cfg.max_val,
+                            tr_match=cfg.tr_match,
                             verbose=cfg.verbose,
                         )
                         completed.append(result)
@@ -431,7 +451,7 @@ def print_summary(results: List[ExperimentResult]):
     print('HYPOTHESIS SWEEP - AGGREGATE RESULTS')
     print('='*130)
     header = (f"{'d':>4} {'seed':>4} {'dataset':<14} {'budget':>8} {'TR_acc':>8} {'CRF_acc':>8} "
-              f"{'CRF/TR':>7} {'tok_eff':>7} {'acc/FLOP':>9} {'acc/param':>9} {'hyp?':>5}")
+              f"{'CRF/TR':>7} {'tok_eff':>7} {'acc/FLOP':>9} {'acc/param':>9} {'match':>5} {'hyp?':>5}")
     print(header)
     print('-'*130)
     for r in sorted(results, key=lambda x: (x.dataset, x.d_model, x.seed, x.budget)):
@@ -443,7 +463,7 @@ def print_summary(results: List[ExperimentResult]):
         ap = (r.crf_acc_per_param / max(1e-12, r.tr_acc_per_param)) if r.tr_acc_per_param > 0 else 0
         print(f"{r.d_model:>4} {r.seed:>4} {r.dataset:<14} {r.budget:>8,} "
               f"{r.tr_best_acc:>8.4f} {r.crf_best_acc:>8.4f} {ratio:>6.2f}x "
-              f"{tok:>7} {af:>8.1f}x {ap:>8.1f}x {hyp:>5}")
+              f"{tok:>7} {af:>8.1f}x {ap:>8.1f}x {r.tr_match:>5} {hyp:>5}")
     print('-'*130)
     n_hyp = sum(1 for r in results if r.hypothesis_supported)
     tok_effs = [r.token_efficiency for r in results if r.token_efficiency > 0]
@@ -594,6 +614,11 @@ def parse_args():
     p.add_argument('--budgets', type=str, help='Comma-separated token budgets')
     p.add_argument('--seeds', type=str, help='Comma-separated seeds')
     p.add_argument('--datasets', type=str, help='Comma-separated dataset names')
+    p.add_argument('--tr-match', choices=['param', 'flop'], default='param',
+                   help="How to size the Transformer baseline (param=matched params, "
+                        "flop=matched per-forward FLOPs)")
+    p.add_argument('--out', type=str, default=None,
+                   help='Output results JSON path (default: results/hypothesis_sweep_results.json)')
     p.add_argument('--seq-len', type=int, default=32)
     p.add_argument('--batch-size', type=int, default=8)
     p.add_argument('--max-train', type=int, default=2000)
@@ -606,6 +631,9 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
+    if args.out:
+        RESULTS_PATH = Path(args.out)
+        SUMMARY_PATH = RESULTS_PATH.with_name(RESULTS_PATH.stem + '_summary.json')
     if args.mode == 'full':
         cfg = SweepConfig(
             d_models=[32, 64, 128],
@@ -635,10 +663,12 @@ if __name__ == '__main__':
         cfg.seeds = [int(x) for x in args.seeds.split(',')]
     if args.datasets:
         cfg.datasets = [x for x in args.datasets.split(',')]
+    if args.tr_match:
+        cfg.tr_match = args.tr_match
     results = run_sweep(cfg)
     summary = print_summary(results)
-    with open(RESULTS_DIR / 'hypothesis_sweep_summary.json', 'w') as f:
+    with open(SUMMARY_PATH, 'w') as f:
         json.dump(summary, f, indent=2, default=str)
-    print(f'\nFull summary saved to {RESULTS_DIR / "hypothesis_sweep_summary.json"}')
+    print(f'\nFull summary saved to {SUMMARY_PATH}')
     if args.plot:
         plot_efficiency_curves(results)

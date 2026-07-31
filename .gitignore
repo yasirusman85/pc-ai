@@ -13,3 +13,4 @@ results/hypothesis_sweep_results.json
 results/hypothesis_sweep_summary.json
 venv/
 .venv/
+results/sweep_*.log

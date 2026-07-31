@@ -230,6 +230,12 @@ See `CRF_TECHNICAL.md` for complete formalization.
   tokens. GPU parity is unimplemented.
 - **FLOP estimates**: `estimate_crf_flops` is an analytical upper-bound, not a
   profiler measurement. Accuracy-per-FLOP ratios are approximate.
+- **Lifecycle decisions are thresholded, not learned**: cell energy is produced
+  by a learned gate, but the split/death/merge *decisions* apply fixed
+  thresholds (ε_split = 1.05, death < 0.01, merge sim > 0.95). The energy
+  signal itself is differentiable; making the discrete lifecycle choices
+  learned end-to-end (e.g. straight-through estimators) is open work and may
+  be required to avoid plateauing at larger scale.
 - **Baseline matching**: parameter-matched Transformers are found by grid
   search and can be up to 1.6× larger than the CRF they are matched to.
   Normalized metrics (acc/param, acc/FLOP) mitigate but do not fully remove
