@@ -20,6 +20,68 @@ CRF is the first architecture to combine:
 - Per-cell heterogeneous programs (functional specialization emerges)
 - Energy-regulated adaptive computation (hard inputs get more resources)
 
+## System Architecture
+
+### 1. High-Level Model Pipeline
+
+```mermaid
+graph TD
+    A["Input Tokens (B × T)"] --> B["Token Embedding + Positional Encoding"]
+    B --> C["Initial Cell Population (Anchor Cells + Hidden Cells)"]
+    
+    subgraph Fabric["Cellular Reasoning Fabric (N_crf_steps)"]
+        C --> D["1. k-NN Sparse Routing Graph"]
+        D --> E["2. Shared Cell Program Execution (State Δs & Energy ΔE)"]
+        E --> F["3. Energy Regulation (EMA Energy Update)"]
+        F --> G["4. Dynamic Lifecycle (Split / Death / Merge)"]
+        G -->|Repeat for N_crf_steps| D
+    end
+    
+    G --> H["Anchor Cell State Extraction"]
+    H --> I["LayerNorm & LM Projection Head"]
+    I --> J["Output Logits (B × T × V)"]
+```
+
+### 2. Cell Population Lifecycle Dynamics
+
+```mermaid
+stateDiagram-v2
+    [*] --> ActiveCell : Initialized (Anchor / Hidden Cell)
+
+    state ActiveCell {
+        [*] --> Compute : k-NN Message Passing
+        Compute --> StateUpdate : Apply Cell Program (Δs, ΔE)
+        StateUpdate --> EnergyEMA : Update Energy (E_t)
+    }
+
+    ActiveCell --> Split : Energy E_t > ε_split (High Productivity)
+    ActiveCell --> Death : Energy E_t < ε_death (Low Productivity & Non-Anchor)
+    ActiveCell --> Merge : Distance d(c_i, c_j) < ε_merge (Redundant Pair)
+
+    Split --> ActiveCell : Creates 2 Mutated Child Cells
+    Merge --> ActiveCell : Consolidates into 1 Cell
+    Death --> [*] : Cell Removed from Population
+```
+
+### 3. Sparse k-NN Communication Topology
+
+```mermaid
+graph LR
+    subgraph Population["Dynamic Population N(t)"]
+        Anchor1["Anchor Cell 1 (Token 1)"]
+        Anchor2["Anchor Cell 2 (Token 2)"]
+        Hidden1["Cognitive Cell 1 (Split)"]
+        Hidden2["Cognitive Cell 2 (Split)"]
+        Anchor3["Anchor Cell 3 (Token 3)"]
+    end
+
+    Anchor1 <-->|k-NN Message| Hidden1
+    Anchor2 <-->|k-NN Message| Hidden1
+    Hidden1 <-->|k-NN Message| Hidden2
+    Anchor3 <-->|k-NN Message| Hidden2
+    Anchor2 <-->|k-NN Message| Anchor3
+```
+
 ## Installation
 
 ### Requirements
