@@ -1,0 +1,54 @@
+[
+  {
+    "model_name": "CRF",
+    "n_params": 95552,
+    "stages": {
+      "after_task_a": {
+        "task_a": 0.82703125
+      },
+      "after_task_b": {
+        "task_a": 0.458125,
+        "task_b": 0.9290625,
+        "task_a_degradation": 0.4460608350651804
+      },
+      "after_task_c": {
+        "task_a": 0.79078125,
+        "task_b": 0.9290625,
+        "task_c": 0.922578125,
+        "task_a_degradation": 0.04383147553372379,
+        "task_b_degradation": 0.0
+      }
+    },
+    "forgetting_metrics": {
+      "task_a_forgetting": 0.04383147553372379,
+      "task_b_forgetting": 0.0,
+      "total_forgetting": 0.020642405907998936
+    }
+  },
+  {
+    "model_name": "Transformer",
+    "n_params": 144384,
+    "stages": {
+      "after_task_a": {
+        "task_a": 0.8246875
+      },
+      "after_task_b": {
+        "task_a": 0.4375,
+        "task_b": 0.9309375,
+        "task_a_degradation": 0.46949602122015915
+      },
+      "after_task_c": {
+        "task_a": 0.8253125,
+        "task_b": 0.91375,
+        "task_c": 0.916953125,
+        "task_a_degradation": -0.0007578628268283279,
+        "task_b_degradation": 0.018462571332661992
+      }
+    },
+    "forgetting_metrics": {
+      "task_a_forgetting": -0.0007578628268283279,
+      "task_b_forgetting": 0.018462571332661992,
+      "total_forgetting": 0.009433962264150964
+    }
+  }
+]

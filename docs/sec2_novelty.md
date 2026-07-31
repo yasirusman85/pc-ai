@@ -118,4 +118,6 @@ Multi-agent reinforcement learning (MARL; Lowe et al. 2017; Rashid et al. 2018) 
 | Spatial positional layout | ✗ | ✗ | ✗ | ✓ | ✗ | **✓** |
 | Learned sparse routing | ✗ | ✗ | ✓ | ✗ | ✗ | **✓** |
 
-CRF occupies a unique intersection: it is the first architecture to combine **differentiable end-to-end training on token sequences** with **dynamic population lifecycles**, **per-cell heterogeneous programs**, and **energy-regulated adaptive computation**, all within a single forward pass.
+CRF occupies a unique intersection: to our knowledge, it is the first architecture to combine **differentiable end-to-end training on token sequences** with **dynamic population lifecycles**, **per-cell heterogeneous programs**, and **energy-regulated adaptive computation**, all within a single forward pass.
+
+**Caveat.** "First to combine" is a claim about the literature we are aware of, not a formal novelty proof. Each component has substantial prior art (Adaptive Computation Time, Neural Cellular Automata, Mixture-of-Experts, GNN message passing). The empirical question — whether the *combination* delivers better sample efficiency than a matched Transformer — is answered by the experiments in `results/doc/README.md`, not by this positioning table.

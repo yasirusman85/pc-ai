@@ -522,6 +522,12 @@ def get_datasets(
         # Fallback to arithmetic with chain-of-thought
         train_ds = ChainOfThoughtDataset(max_train, seq_len, seed=0, tokenizer=tok)
         val_ds   = ChainOfThoughtDataset(max_val, seq_len, seed=99, tokenizer=tok)
+    elif name == 'shakespeare':
+        # Real language modeling data (Tiny Shakespeare, 1.1M chars)
+        from shakespeare_dataset import get_shakespeare_datasets
+        train_ds, val_ds = get_shakespeare_datasets(
+            seq_len=seq_len, train_ratio=0.9, tokenizer=tok
+        )
     else:  # synthetic
         train_ds = SyntheticDataset(max_train, seq_len, seed=0,  tokenizer=tok)
         val_ds   = SyntheticDataset(max_val,   seq_len, seed=99, tokenizer=tok)

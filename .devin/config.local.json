@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Exec(mkdir)"
+      "Exec(mkdir)",
+      "Exec(git checkout)"
     ]
   }
 }
