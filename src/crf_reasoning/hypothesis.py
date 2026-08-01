@@ -35,7 +35,11 @@ from .data import get_datasets, make_dataloader, CharTokenizer
 from .crf_vectorized import CRFLanguageModel, AblationConfig
 from .ablations import ModelConfig, make_crf, make_transformer
 from .metrics import estimate_crf_flops, estimate_transformer_flops, perplexity
-from scripts.train import count_gpt_params
+try:
+    from scripts.train import count_gpt_params
+except ModuleNotFoundError:
+    def count_gpt_params(model):
+        return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 # Repo-root results dir (survives src/ package move)
 RESULTS_DIR = Path(__file__).resolve().parents[2] / "results"

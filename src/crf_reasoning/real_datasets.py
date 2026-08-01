@@ -40,11 +40,10 @@ class HumanEvalDataset(Dataset):
         try:
             from datasets import load_dataset
 
-            ds = load_dataset(
-                "openai_humaneval",
-                split=split,
-                cache_dir=cache_dir,
-            )
+            try:
+                ds = load_dataset("openai/openai_humaneval", split=split, cache_dir=cache_dir)
+            except Exception:
+                ds = load_dataset("openai_humaneval", split=split, cache_dir=cache_dir)
 
             chunks = []
             for item in ds:
@@ -113,12 +112,10 @@ class GSM8KDataset(Dataset):
         try:
             from datasets import load_dataset
 
-            ds = load_dataset(
-                "gsm8k",
-                "main",
-                split=split,
-                cache_dir=cache_dir,
-            )
+            try:
+                ds = load_dataset("openai/gsm8k", "main", split=split, cache_dir=cache_dir)
+            except Exception:
+                ds = load_dataset("gsm8k", "main", split=split, cache_dir=cache_dir)
 
             chunks = []
             for item in ds:
