@@ -14,6 +14,8 @@ class CellProgram(nn.Module):
         self.msg = nn.Linear(d_model, d_model)
         self.norm = nn.LayerNorm(d_model)
         self.energy_gate = nn.Linear(d_model, 1)
+        # Bias 2.5 → sigmoid ≈ 0.92 → energy accumulates past ε_split
+        nn.init.constant_(self.energy_gate.bias, 2.5)
 
     def forward(self, state, message):
         x = torch.cat([state, message], dim=-1)
@@ -47,8 +49,8 @@ class CognitiveCell(nn.Module):
         self.age += 1
         new_state, out_msg, energy_delta = self.program(self.state, message)
         self.state.data = new_state
-        self.energy.data = (self.energy * 0.95 + energy_delta.squeeze(-1) * 0.05).clamp(
-            0, 5
+        self.energy.data = (self.energy * 0.95 + energy_delta.squeeze(-1) * 0.20).clamp(
+            0.0, 5.0
         )
         return out_msg
 
@@ -139,7 +141,7 @@ class CellularReasoningFabric(nn.Module):
                     c = cells[i]
                     if (
                         not c.is_anchor
-                        and c.energy.item() > 1.5
+                        and c.energy.item() > 1.02
                         and len(cells) < self.max_cells
                     ):
                         cp = c.pos + (torch.randn(2, device=device) * 0.5).clamp(
@@ -157,7 +159,7 @@ class CellularReasoningFabric(nn.Module):
                     [
                         i
                         for i, c in enumerate(cells)
-                        if not c.is_anchor and c.energy.item() < 0.01
+                        if not c.is_anchor and c.energy.item() < 0.005
                     ],
                     reverse=True,
                 )
@@ -173,7 +175,7 @@ class CellularReasoningFabric(nn.Module):
                         sim = F.cosine_similarity(
                             ca.state.unsqueeze(0), cb.state.unsqueeze(0)
                         ).item()
-                        if sim > 0.95:
+                        if sim > 0.85:
                             ca.state.data = (ca.state + cb.state) / 2
                             ca.energy.data = ca.energy + cb.energy
                             ca.pos.data = (ca.pos + cb.pos) / 2

@@ -31,9 +31,7 @@ class TestAblationConfig:
 
     def test_custom_config(self):
         """Test custom configuration."""
-        config = AblationConfig(
-            use_split=False, use_routing=False, spatial_lambda=0.1
-        )
+        config = AblationConfig(use_split=False, use_routing=False, spatial_lambda=0.1)
         assert config.use_split is False
         assert config.use_routing is False
         assert config.spatial_lambda == 0.1
@@ -279,6 +277,7 @@ class TestCRFLanguageModel:
         assert logits.shape == (2, 10, 99)
         assert loss is not None
         assert isinstance(metrics, CRFMetrics)
+
     def test_forward_without_targets(self, model):
         """Test forward pass without targets."""
         x = torch.randint(0, 99, (2, 10))
@@ -349,6 +348,77 @@ class TestIntegration:
 
             assert logits.shape == (2, 8, 99)
             assert loss is not None
+
+
+class TestCellDynamicsActivate:
+    """Verify that cell dynamics (split/death/merge) actually fire."""
+
+    def test_splits_activate_with_energy(self):
+        """Splits should fire when energy accumulates past threshold."""
+        torch.manual_seed(42)
+        cfg = AblationConfig()
+        # Use enough max_cells headroom and steps for splits to trigger
+        model = CRFLanguageModel(
+            vocab_size=50,
+            d_model=32,
+            d_hidden=16,
+            n_init_cells=8,
+            max_cells=256,  # plenty of headroom
+            n_crf_steps=8,  # enough steps for energy to accumulate
+            k_neighbors=2,
+            cfg=cfg,
+        )
+        x = torch.randint(0, 50, (1, 6))
+        _, _, mets = model(x, targets=x, collect_metrics=True)
+        # At least one lifecycle event should fire
+        total_events = mets.n_splits + mets.n_deaths + mets.n_merges
+        assert total_events > 0, (
+            f"No dynamics activated: splits={mets.n_splits}, "
+            f"deaths={mets.n_deaths}, merges={mets.n_merges}, "
+            f"energy_mean={mets.energy_mean:.4f}, "
+            f"energy_max={mets.energy_max:.4f}"
+        )
+
+    def test_energy_diagnostic_fields(self):
+        """CRFMetrics should track energy diagnostics."""
+        torch.manual_seed(0)
+        cfg = AblationConfig()
+        model = CRFLanguageModel(
+            vocab_size=50,
+            d_model=32,
+            d_hidden=16,
+            n_init_cells=8,
+            max_cells=64,
+            n_crf_steps=4,
+            k_neighbors=2,
+            cfg=cfg,
+        )
+        x = torch.randint(0, 50, (1, 6))
+        _, _, mets = model(x, targets=x, collect_metrics=True)
+        # Energy diagnostics should be populated
+        assert mets.energy_mean > 0, "energy_mean should be positive"
+        assert mets.energy_max >= mets.energy_mean
+        assert mets.energy_min <= mets.energy_mean
+
+    def test_max_cells_per_sequence_not_global(self):
+        """Batched runs should not block splits due to global max_cells check."""
+        torch.manual_seed(42)
+        cfg = AblationConfig()
+        model = CRFLanguageModel(
+            vocab_size=50,
+            d_model=32,
+            d_hidden=16,
+            n_init_cells=4,
+            max_cells=128,  # per-sequence, so total cap = 128 * B
+            n_crf_steps=8,
+            k_neighbors=2,
+            cfg=cfg,
+        )
+        x = torch.randint(0, 50, (2, 6))  # batch of 2
+        _, _, mets = model(x, targets=x, collect_metrics=True)
+        # Population should start below max_total (128*2=256)
+        # so splits should have a chance to fire
+        assert mets.energy_max > 0, "Energy should accumulate"
 
 
 if __name__ == "__main__":

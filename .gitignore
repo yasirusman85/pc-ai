@@ -18,3 +18,7 @@ checkpoints/
 .pytest_cache/
 .mypy_cache/
 results/sweep_*.log
+hf_model/
+hf_dataset/
+hf_space/
+

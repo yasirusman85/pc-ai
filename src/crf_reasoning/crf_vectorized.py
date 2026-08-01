@@ -62,6 +62,9 @@ class CRFMetrics:
     specialization: float = 0.0  # mean off-diagonal cosine distance of anchor states
     graph_diameters: list = field(default_factory=list)
     wall_time_s: float = 0.0
+    energy_mean: float = 0.0  # diagnostic: mean energy across all cells
+    energy_max: float = 0.0  # diagnostic: max energy across all cells
+    energy_min: float = 0.0  # diagnostic: min energy across all cells
 
 
 # ─── Shared CellProgram (weight-shared across all cells) ───────────────────
@@ -215,11 +218,21 @@ class CellPopulation:
     ):
         if not cfg.use_split:
             return
-        if self.N >= max_cells:
+
+        # Fix: check per-sequence cell count, not global batch total.
+        # In batched mode the flattened population far exceeds max_cells,
+        # which caused apply_split to always return immediately.
+        if self.batch_id is not None:
+            n_seqs = int(self.batch_id.max().item()) + 1
+            max_total = max_cells * n_seqs
+        else:
+            max_total = max_cells
+        if self.N >= max_total:
             return
 
-        # Fix 3: lowered ε_split from 1.5 → 1.05 so lifecycle activates
-        EPS_SPLIT = 1.05
+        # Fix: lowered ε_split from 1.5 → 1.02 so lifecycle activates
+        # with the tuned energy accumulation rate.
+        EPS_SPLIT = 1.02
         if cfg.use_energy:
             eligible = (~self.anchor_mask) & (self.energies > EPS_SPLIT)
         else:
@@ -231,7 +244,7 @@ class CellPopulation:
         if len(idxs) == 0:
             return
 
-        n_new = min(len(idxs), max_cells - self.N)
+        n_new = min(len(idxs), max_total - self.N)
         idxs = idxs[:n_new]
 
         parent_s = self.states[idxs]
@@ -265,7 +278,7 @@ class CellPopulation:
             return
 
         if cfg.use_energy:
-            keep = self.anchor_mask | (self.energies >= 0.01)
+            keep = self.anchor_mask | (self.energies >= 0.005)
         else:
             keep = torch.ones(self.N, dtype=torch.bool, device=self.device)
 
@@ -285,7 +298,7 @@ class CellPopulation:
         self,
         cfg: AblationConfig,
         metrics: CRFMetrics,
-        tau: float = 0.95,
+        tau: float = 0.85,
     ):
         if not cfg.use_merge or self.N < 3:
             return
@@ -482,22 +495,30 @@ class VectorizedCRF(nn.Module):
             pop.states = new_states
 
             # 3. Energy update
-            # Fix 3: lower decay (0.95→0.90), amplify delta (×2), so E
-            # climbs past ε_split=1.05 within ~5 steps even for idle cells.
+            # Fix: gentler decay (0.95) + stronger accumulation (0.20) so
+            # energy can climb past ε_split=1.02 within a few steps.
+            # Clamp lower bound to 0.0 (not 0.01) so deaths can trigger.
             if cfg.use_energy:
-                pop.energies = (0.90 * pop.energies + 0.10 * energy_delta * 2).clamp(
-                    0.01, 5
+                pop.energies = (0.95 * pop.energies + 0.20 * energy_delta).clamp(
+                    0.0, 5.0
                 )
             else:
                 pop.energies = torch.ones_like(pop.energies)
 
-            # 4. Lifecycle (every 3 steps)
-            if step % 3 == 0:
+            # Track energy diagnostics
+            metrics.energy_mean = pop.energies.mean().item()
+            metrics.energy_max = pop.energies.max().item()
+            metrics.energy_min = pop.energies.min().item()
+
+            # 4. Lifecycle (every 2 steps — was every 3, too infrequent
+            #    for small n_crf_steps like 4)
+            if step % 2 == 0:
                 pop.apply_split(cfg, self.program, self.max_cells, metrics)
                 pop.apply_death(cfg, metrics)
 
-            # 5. Merge (every 5 steps)
-            if step % 5 == 0 and step > 0:
+            # 5. Merge (every 3 steps, starting at step 2 — was every 5,
+            #    never triggered with n_crf_steps=4)
+            if step % 3 == 0 and step > 0:
                 pop.apply_merge(cfg, metrics)
 
         # ── Extract anchor outputs per batch ───────────────────────────

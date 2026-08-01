@@ -105,8 +105,17 @@ def evaluate_crf_flops(
     fallback_threshold: int = 64,
 ) -> int:
     """Alias for estimate_crf_flops (used by __init__ exports)."""
-    return estimate_crf_flops(N, d, d_h, k, S, use_sublinear, max_candidates,
-                              search_radius, fallback_threshold)
+    return estimate_crf_flops(
+        N,
+        d,
+        d_h,
+        k,
+        S,
+        use_sublinear,
+        max_candidates,
+        search_radius,
+        fallback_threshold,
+    )
 
 
 def evaluate_transformer_flops(
@@ -213,6 +222,9 @@ def aggregate_metrics(metrics_list) -> Dict:
     all_spec = []
     all_comm = []
     all_time = []
+    all_energy_mean = []
+    all_energy_max = []
+    all_energy_min = []
     total_splits = 0
     total_deaths = 0
     total_merges = 0
@@ -226,6 +238,10 @@ def aggregate_metrics(metrics_list) -> Dict:
         total_splits += m.n_splits
         total_deaths += m.n_deaths
         total_merges += m.n_merges
+        if hasattr(m, "energy_mean"):
+            all_energy_mean.append(m.energy_mean)
+            all_energy_max.append(m.energy_max)
+            all_energy_min.append(m.energy_min)
 
     n_examples = len(metrics_list)
 
@@ -247,6 +263,10 @@ def aggregate_metrics(metrics_list) -> Dict:
         "merges_per_ex": total_merges / n_examples,
         "n_examples": n_examples,
     }
+    if all_energy_mean:
+        result["energy_mean"] = sum(all_energy_mean) / len(all_energy_mean)
+        result["energy_max"] = max(all_energy_max)
+        result["energy_min"] = min(all_energy_min)
     return result
 
 
