@@ -45,6 +45,8 @@ class AblationConfig:
     routing_grid_size: float = 1.0
     routing_search_radius: int = 1
     routing_max_candidates: int = 32
+    use_dynamic_halting: bool = True  # early exit when state updates converge
+    halt_threshold: float = 0.005  # state delta threshold for halting
 
 
 # ─── Per-forward-pass metrics ──────────────────────────────────────────────
@@ -65,6 +67,8 @@ class CRFMetrics:
     energy_mean: float = 0.0  # diagnostic: mean energy across all cells
     energy_max: float = 0.0  # diagnostic: max energy across all cells
     energy_min: float = 0.0  # diagnostic: min energy across all cells
+    steps_executed: int = 0  # actual CRF reasoning steps executed (dynamic halting)
+    flop_savings_pct: float = 0.0  # % FLOPs saved via early halting
 
 
 # ─── Shared CellProgram (weight-shared across all cells) ───────────────────
@@ -480,18 +484,34 @@ class VectorizedCRF(nn.Module):
         metrics = CRFMetrics()
 
         # ── Step loop ──────────────────────────────────────────────────
+        prev_states = None
         for step in range(n_steps):
             if pop.N < 2:
                 break
 
             metrics.n_cells_per_step.append(pop.N)
             metrics.comm_cost += self.fabric.k * pop.N
+            metrics.steps_executed += 1
 
             # 1. Routing → messages
             messages = self.fabric(pop.states, pop.positions, cfg, pop.batch_id)  # N×d
 
             # 2. Cell program (batched)
             new_states, _, energy_delta = self.program(pop.states, messages)
+
+            # Dynamic Halting (ACT): check convergence delta
+            if (
+                cfg.use_dynamic_halting
+                and prev_states is not None
+                and prev_states.shape == new_states.shape
+            ):
+                state_delta = torch.norm(new_states - prev_states, p="fro") / math.sqrt(
+                    new_states.numel()
+                )
+                if state_delta.item() < cfg.halt_threshold and step >= 1:
+                    pop.states = new_states
+                    break
+            prev_states = new_states.clone()
             pop.states = new_states
 
             # 3. Energy update
@@ -549,6 +569,9 @@ class VectorizedCRF(nn.Module):
                 mask = ~torch.eye(T, dtype=torch.bool, device=device)
                 metrics.specialization = (1 - cos_sim_mat[mask]).mean().item()
             metrics.wall_time_s = time.time() - t0
+            metrics.flop_savings_pct = max(
+                0.0, (1.0 - (metrics.steps_executed / max(1, n_steps))) * 100.0
+            )
 
         return out, metrics  # B×T×d, CRFMetrics
 
